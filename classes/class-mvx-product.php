@@ -1331,7 +1331,7 @@ class MVX_Product {
      */
     function convert_business_id_to_taxonomy_term_in_query($query) {
         global $pagenow, $MVX;
-        if (is_shop()) return;
+        if (is_shop() || is_product_category()) return;
         if (is_admin()) {
             if (isset($_GET['post_type']) && $_GET['post_type'] == 'product' && $pagenow == 'edit.php') {
                 $current_user_id = get_current_vendor_id();
