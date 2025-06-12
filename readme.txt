@@ -14,10 +14,10 @@ Transform your WooCommerce store into multivendor marketplace with MultiVendorX 
 == Description ==
 
 = MultiVendorX - Most Recommended WooCommerce Multivendor Marketplace Plugin for WordPress =
-Build your own multivendor marketplace in minutes—no code required.
+Build your own multivendor marketplace in minutes-no code required.
 **MultiVendorX** is a flexible and powerful WooCommerce multivendor marketplace plugin for WordPress, built to help you launch and manage a full-featured marketplace with ease.
 
-From digital downloads to physical products, everything you need is included—even in the free version. With fast setup, seamless vendor management, and built-in commission control, MultiVendorX is designed to grow with your business. Ideal for entrepreneurs aiming to establish their own multivendor platform reminiscent of popular multivendor marketplaces like  <strong> Amazon,  eBay, Etsy,  Airbnb , or Flipkart. </strong>
+From digital downloads to physical products, everything you need is included-even in the free version. With fast setup, seamless vendor management, and built-in commission control, MultiVendorX is designed to grow with your business. Ideal for entrepreneurs aiming to establish their own multivendor platform reminiscent of popular multivendor marketplaces like  <strong> Amazon,  eBay, Etsy,  Airbnb , or Flipkart. </strong>
 
 = Try us because we provide: =
 * **Code-free** solution to effortlessly set up a multi-vendor marketplace.
@@ -96,7 +96,7 @@ Discover everything **MultiVendorX's Features** [here](https://multivendorx.com/
 
 
 = 🌟 Taste Victory of Advanced Features of MultiVendorX Pro: =
-Competition requires the right toolkit. To thrive in today’s dynamic multi vendor marketplace, you need features that empower vendors and streamline woocommerce marketplace management. That’s where [MultiVendorX Pro](https://multivendorx.com/pricing/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg) comes in — a feature-rich solution built to elevate your WooCommerce marketplace.
+Competition requires the right toolkit. To thrive in today’s dynamic multi vendor marketplace, you need features that empower vendors and streamline woocommerce marketplace management. That’s where [MultiVendorX Pro](https://multivendorx.com/pricing/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg) comes in - a feature-rich solution built to elevate your WooCommerce marketplace.
 
 * 📋 **[Customizable Membership Plan](https://multivendorx.com/docs/knowledgebase/marketplace-memberhsip/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg)** – Offer Free, trial, or paid memberships with MultiVendorX Vendor membership. Customize fees, rates, and benefits.
 * 💳 **Real-Time Payment**: Enable instant payment processing for vendors using following payment gateways : 
@@ -123,8 +123,8 @@ Competition requires the right toolkit. To thrive in today’s dynamic multi ven
 Migrate to MultiVendorX Without a Hitch!
 Thinking of switching from WCFM Marketplace, WC Vendors, or Dokan Multivendor? With our [**migration tool**](https://multivendorx.com/docs/knowledgebase/migration/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg), making the move to MultiVendorX is as smooth as it gets.
 
-Experience everything our multivendor marketplace plugin has to offer — risk-free. Test the waters before committing, and rest easy knowing that all your vital WordPress data is safe.
-Our seamless migration process transfers all vendor, product, and order data from your current WooCommerce marketplace plugin — whether it’s Dokan, WCFM, or WC Vendors — to MultiVendorX without data loss or downtime.
+Experience everything our multivendor marketplace plugin has to offer - risk-free. Test the waters before committing, and rest easy knowing that all your vital WordPress data is safe.
+Our seamless migration process transfers all vendor, product, and order data from your current WooCommerce marketplace plugin - whether it’s Dokan, WCFM, or WC Vendors - to MultiVendorX without data loss or downtime.
 Start your journey as a confident MultiVendorXian and build your dream WordPress marketplace today!
 
 = Third party compatibility = 
