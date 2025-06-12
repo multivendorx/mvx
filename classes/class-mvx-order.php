@@ -328,6 +328,7 @@ class MVX_Order {
                     $variation = isset($item['variation']) && !empty($item['variation']) ? $item['variation'] : array();
                     $item_commission = $MVX->commission->get_item_commission($item['product_id'], $variation_id, $item, $order_id, $item_id);
                     $commission_values = $MVX->commission->get_commission_amount($item['product_id'], $has_vendor->term_id, $variation_id, $item_id, $order);
+                    $commission_values = apply_filters('mvx_get_commission_amount', $commission_values, $item['product_id'], $has_vendor->term_id, $variation_id, $item_id, $order);
                     $commission_rate = array('mode' => $MVX->vendor_caps->payment_cap['revenue_sharing_mode'], 'type' => $MVX->vendor_caps->payment_cap['commission_type']);
                     $commission_rate['commission_val'] = isset($commission_values['commission_val']) ? $commission_values['commission_val'] : 0;
                     $commission_rate['commission_fixed'] = isset($commission_values['commission_fixed']) ? $commission_values['commission_fixed'] : 0;
