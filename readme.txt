@@ -1,6 +1,6 @@
 === MultiVendorX - WooCommerce Multivendor Marketplace Solutions ===
 Contributors: wcmp, purnendu
-Tags: multiseller, multi-vendor marketplace, woocommerce multivendor marketplace, multi seller store, best marketplace plugin
+Tags: WooCommerce multivendor marketplace, multi seller, multi vendor, multivendor, multivendor marketplace
 Donate link: http://multivendorx.com/donate/
 Requires at least: 5.4
 Tested up to: 6.8.1
@@ -9,11 +9,11 @@ Stable tag: 4.2.25
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Transform your WooCommerce store into multivendor marketplace with MultiVendorX - most recommended WooCommerce multi-vendor marketplace solution
+MultiVendorX: WordPress multivendor plugin to build your dream marketplace
 
 == Description ==
 
-= MultiVendorX - Most Recommended WooCommerce Multivendor Marketplace Plugin for WordPress =
+= MULTIVENDOR MARKETPLACE PLUGIN FOR WORDPRESS – POWERED BY WOOCOMMERCE =
 Build your own multivendor marketplace in minutes-no code required.
 **MultiVendorX** is a flexible and powerful WooCommerce multivendor marketplace plugin for WordPress, built to help you launch and manage a full-featured marketplace with ease.
 
