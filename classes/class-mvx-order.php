@@ -1525,7 +1525,7 @@ class MVX_Order {
         ?>
         <p><button type="button" class="button wp-element-button" id="cust_request_refund_btn" name="cust_request_refund_btn" value="<?php echo $refund_button_text; ?>"><?php echo $refund_button_text; ?></button></p>
         <div id="mvx-myac-order-refund-wrap" class="mvx-myac-order-refund-wrap">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 <?php wp_nonce_field('customer_request_refund', 'cust-request-refund-nonce'); ?>
                 <fieldset>
                     <label class="section-heading"><?php echo __('Choose the product(s) you want a refund for', 'multivendorx'); ?></label>
@@ -1580,6 +1580,10 @@ class MVX_Order {
                         <label for="additional_info"><?php _e('Provide additional information', 'multivendorx'); ?></label>
                         <textarea class="woocommerce-Input input-text" name="refund_request_addi_info" id="refund_request_addi_info"></textarea>
                     </p>
+                    <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                        <label for="product_img"><?php _e('Upload an image of the product', 'multivendorx'); ?></label>
+                        <input type="file" class="woocommerce-Input input-img" name="product_img" id="product_img" accept="image/*">
+                    </p>
 
                     <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                         <button type="submit" class="button wp-element-button" name="cust_request_refund_sbmt" value="<?php _e('Submit', 'multivendorx'); ?>"><?php _e('Submit', 'multivendorx'); ?></button>
@@ -1630,15 +1634,32 @@ class MVX_Order {
         $refund_reason_options = ( isset( $refund_settings['refund_order_msg'] ) && $refund_settings['refund_order_msg'] ) ? explode( "||", $refund_settings['refund_order_msg'] ) : array();
         $refund_reason = ( $reason_option == 'others' ) ? $refund_reason_other : (isset( $refund_reason_options[$reason_option] ) ? $refund_reason_options[$reason_option] : '');
         $refund_product = isset($_REQUEST['refund_product']) ? wc_clean($_REQUEST['refund_product']) : '' ;
+        if ( isset($_FILES['product_img']) && $_FILES['product_img']['error'] === UPLOAD_ERR_OK ) {
+            if (!function_exists('wp_handle_upload')) {
+                require_once ABSPATH . 'wp-admin/includes/file.php';
+            }
+        
+            $uploadedfile = $_FILES['product_img'];
+            $upload_overrides = array('test_form' => false);
+            $movefile = wp_handle_upload($uploadedfile, $upload_overrides);
+        
+            if ($movefile && !isset($movefile['error'])) {
+                $uploaded_image_url = esc_url($movefile['url']);
+            } else {
+                $uploaded_image_url = ''; // or set error if needed
+            }
+        }
         $refund_details = array(
             'refund_reason' => $refund_reason,
             'addi_info' => $refund_request_addi_info,
             'refund_product'=> $refund_product,
+            'product_img_url' => $uploaded_image_url,
         );
         // update customer refunt request 
         $order->update_meta_data('_customer_refund_order', wc_clean( wp_unslash( 'refund_request' ) ));
         $order->update_meta_data('_customer_refund_reason', wc_clean( wp_unslash( $refund_reason ) ));
         $order->update_meta_data('_customer_refund_product', wc_clean( wp_unslash($refund_product ) ));
+        $order->update_meta_data('_customer_refund_product_img', esc_url_raw( $uploaded_image_url ));
         $order->save();
         $comment_id = $order->add_order_note( __('Customer requested a refund ', 'multivendorx') .$order_id.' .' );
         // user info
