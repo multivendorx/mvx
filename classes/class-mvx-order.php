@@ -1582,7 +1582,7 @@ class MVX_Order {
                     </p>
                     <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                         <label for="product_img"><?php _e('Upload an image of the product', 'multivendorx'); ?></label>
-                        <input type="file" class="woocommerce-Input input-img" name="product_img" id="product_img" accept="image/*">
+                        <input type="file" class="woocommerce-Input input-img" name="product_img[]" id="product_img" accept="image/*" multiple>
                     </p>
 
                     <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
@@ -1634,32 +1634,44 @@ class MVX_Order {
         $refund_reason_options = ( isset( $refund_settings['refund_order_msg'] ) && $refund_settings['refund_order_msg'] ) ? explode( "||", $refund_settings['refund_order_msg'] ) : array();
         $refund_reason = ( $reason_option == 'others' ) ? $refund_reason_other : (isset( $refund_reason_options[$reason_option] ) ? $refund_reason_options[$reason_option] : '');
         $refund_product = isset($_REQUEST['refund_product']) ? wc_clean($_REQUEST['refund_product']) : '' ;
-        if ( isset($_FILES['product_img']) && $_FILES['product_img']['error'] === UPLOAD_ERR_OK ) {
+        $uploaded_image_urls = [];
+        if (isset($_FILES['product_img']) && !empty($_FILES['product_img']['name'][0])) {
             if (!function_exists('wp_handle_upload')) {
                 require_once ABSPATH . 'wp-admin/includes/file.php';
             }
         
-            $uploadedfile = $_FILES['product_img'];
-            $upload_overrides = array('test_form' => false);
-            $movefile = wp_handle_upload($uploadedfile, $upload_overrides);
+            $file_count = count($_FILES['product_img']['name']);
         
-            if ($movefile && !isset($movefile['error'])) {
-                $uploaded_image_url = esc_url($movefile['url']);
-            } else {
-                $uploaded_image_url = ''; // or set error if needed
+            for ($i = 0; $i < $file_count; $i++) {
+                $file = [
+                    'name'     => $_FILES['product_img']['name'][$i],
+                    'type'     => $_FILES['product_img']['type'][$i],
+                    'tmp_name' => $_FILES['product_img']['tmp_name'][$i],
+                    'error'    => $_FILES['product_img']['error'][$i],
+                    'size'     => $_FILES['product_img']['size'][$i],
+                ];
+        
+                if ($file['error'] === UPLOAD_ERR_OK) {
+                    $upload_overrides = ['test_form' => false];
+                    $movefile = wp_handle_upload($file, $upload_overrides);
+        
+                    if ($movefile && !isset($movefile['error'])) {
+                        $uploaded_image_urls[] = esc_url_raw($movefile['url']);
+                    }
+                }
             }
         }
         $refund_details = array(
             'refund_reason' => $refund_reason,
             'addi_info' => $refund_request_addi_info,
             'refund_product'=> $refund_product,
-            'product_img_url' => $uploaded_image_url,
+            'product_img_urls' => $uploaded_image_urls,
         );
         // update customer refunt request 
         $order->update_meta_data('_customer_refund_order', wc_clean( wp_unslash( 'refund_request' ) ));
         $order->update_meta_data('_customer_refund_reason', wc_clean( wp_unslash( $refund_reason ) ));
         $order->update_meta_data('_customer_refund_product', wc_clean( wp_unslash($refund_product ) ));
-        $order->update_meta_data('_customer_refund_product_img', esc_url_raw( $uploaded_image_url ));
+        $order->update_meta_data('_customer_refund_product_imgs', esc_url_raw( $uploaded_image_urls ));
         $order->save();
         $comment_id = $order->add_order_note( __('Customer requested a refund ', 'multivendorx') .$order_id.' .' );
         // user info

@@ -31,7 +31,9 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
         <li><strong><?php _e( 'Refund Product', 'multivendorx' ); ?>:</strong> <span class="text"><?php echo implode( ',', $refund_details['refund_product'] ); ?></span></li>
         <li>
             <strong><?php _e('Uploaded Product Image', 'multivendorx'); ?>:</strong><br/>
-            <img src="<?php echo esc_url($refund_details['product_img_url']); ?>" alt="Refund Product Image" style="max-width: 200px; padding: 4px;" />
+            <?php foreach ($refund_details['product_image_urls'] as $img_url) : ?>
+                <img src="<?php echo esc_url($img_url); ?>" style="max-width: 200px; margin: 5px;" alt="Uploaded image" />
+            <?php endforeach; ?>
         </li>
 		</ul>
     <?php }else{ ?>
