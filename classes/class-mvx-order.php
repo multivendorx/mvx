@@ -1671,7 +1671,7 @@ class MVX_Order {
         $order->update_meta_data('_customer_refund_order', wc_clean( wp_unslash( 'refund_request' ) ));
         $order->update_meta_data('_customer_refund_reason', wc_clean( wp_unslash( $refund_reason ) ));
         $order->update_meta_data('_customer_refund_product', wc_clean( wp_unslash($refund_product ) ));
-        $order->update_meta_data('_customer_refund_product_imgs', esc_url_raw( $uploaded_image_urls ));
+        $order->update_meta_data('_customer_refund_product_imgs', $uploaded_image_urls );
         $order->save();
         $comment_id = $order->add_order_note( __('Customer requested a refund ', 'multivendorx') .$order_id.' .' );
         // user info
