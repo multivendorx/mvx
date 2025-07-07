@@ -1643,6 +1643,13 @@ class MVX_Order {
             $max_file_size = 10 * 1024 * 1024; // 10MB
         
             $file_count = count($_FILES['product_img']['name']);
+
+            $allowedMimes = array(
+                'jpg|jpeg|jpe' => 'image/jpeg',
+                'gif'          => 'image/gif',
+                'png'          => 'image/png',
+                'webp'         => 'image/webp',
+            );
         
             for ($i = 0; $i < $file_count; $i++) {
                 $file = [
@@ -1657,7 +1664,7 @@ class MVX_Order {
                     continue;
                 }
         
-                $file_info = wp_check_filetype( basename( $file['name'] ) );
+                $file_info = wp_check_filetype( basename( $file['name'] ), $allowedMimes );
                 if ( empty( $file_info['type'] ) ) {
                     continue;
                 }
