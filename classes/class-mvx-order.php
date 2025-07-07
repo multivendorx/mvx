@@ -1582,7 +1582,7 @@ class MVX_Order {
                     </p>
                     <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                         <label for="product_img"><?php _e('Upload an image of the product', 'multivendorx'); ?></label>
-                        <input type="file" class="woocommerce-Input input-img" name="product_img[]" id="product_img" accept="image/*" multiple>
+                        <input type="file" class="woocommerce-Input input-img" name="product_img[]" id="product_img" accept="image/jpeg, image/png, image/gif, image/webp" multiple>
                     </p>
 
                     <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
@@ -1635,23 +1635,36 @@ class MVX_Order {
         $refund_reason = ( $reason_option == 'others' ) ? $refund_reason_other : (isset( $refund_reason_options[$reason_option] ) ? $refund_reason_options[$reason_option] : '');
         $refund_product = isset($_REQUEST['refund_product']) ? wc_clean($_REQUEST['refund_product']) : '' ;
         $uploaded_image_urls = [];
-        if (isset($_FILES['product_img']) && !empty($_FILES['product_img']['name'][0])) {
+        if ( isset($_FILES['product_img']) && !empty($_FILES['product_img']['name'][0]) ) {
             if (!function_exists('wp_handle_upload')) {
                 require_once ABSPATH . 'wp-admin/includes/file.php';
             }
         
+            $allowed_mime_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            $max_file_size = 10 * 1024 * 1024; // 10MB
+        
             $file_count = count($_FILES['product_img']['name']);
         
             for ($i = 0; $i < $file_count; $i++) {
-                $file = [
-                    'name'     => $_FILES['product_img']['name'][$i],
-                    'type'     => $_FILES['product_img']['type'][$i],
-                    'tmp_name' => $_FILES['product_img']['tmp_name'][$i],
-                    'error'    => $_FILES['product_img']['error'][$i],
-                    'size'     => $_FILES['product_img']['size'][$i],
-                ];
+                $name     = sanitize_file_name($_FILES['product_img']['name'][$i]);
+                $type     = mime_content_type($_FILES['product_img']['tmp_name'][$i]);
+                $tmp_name = $_FILES['product_img']['tmp_name'][$i];
+                $error    = (int) $_FILES['product_img']['error'][$i];
+                $size     = (int) $_FILES['product_img']['size'][$i];
         
-                if ($file['error'] === UPLOAD_ERR_OK) {
+                if ($error === UPLOAD_ERR_OK) {
+                    // Validate MIME type
+                    if (!in_array($type, $allowed_mime_types, true)) {
+                        continue;
+                    }
+        
+                    // Validate file size
+                    if ($size > $max_file_size) {
+                        continue;
+                    }
+        
+                    $file = compact('name', 'type', 'tmp_name', 'error', 'size');
+        
                     $upload_overrides = ['test_form' => false];
                     $movefile = wp_handle_upload($file, $upload_overrides);
         
