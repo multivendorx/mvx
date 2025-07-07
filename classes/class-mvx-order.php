@@ -1639,38 +1639,37 @@ class MVX_Order {
             if (!function_exists('wp_handle_upload')) {
                 require_once ABSPATH . 'wp-admin/includes/file.php';
             }
-        
-            $allowed_mime_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
             $max_file_size = 10 * 1024 * 1024; // 10MB
         
             $file_count = count($_FILES['product_img']['name']);
         
             for ($i = 0; $i < $file_count; $i++) {
-                $name     = sanitize_file_name($_FILES['product_img']['name'][$i]);
-                $type     = mime_content_type($_FILES['product_img']['tmp_name'][$i]);
-                $tmp_name = $_FILES['product_img']['tmp_name'][$i];
-                $error    = (int) $_FILES['product_img']['error'][$i];
-                $size     = (int) $_FILES['product_img']['size'][$i];
+                $file = [
+                    'name'     => sanitize_file_name($_FILES['product_img']['name'][$i]),
+                    'type'     => $_FILES['product_img']['type'][$i],
+                    'tmp_name' => $_FILES['product_img']['tmp_name'][$i],
+                    'error'    => (int) $_FILES['product_img']['error'][$i],
+                    'size'     => (int) $_FILES['product_img']['size'][$i],
+                ];
         
-                if ($error === UPLOAD_ERR_OK) {
-                    // Validate MIME type
-                    if (!in_array($type, $allowed_mime_types, true)) {
-                        continue;
-                    }
+                if ($file['error'] !== UPLOAD_ERR_OK || $file['size'] > $max_file_size) {
+                    continue;
+                }
         
-                    // Validate file size
-                    if ($size > $max_file_size) {
-                        continue;
-                    }
+                $file_info = wp_check_filetype( basename( $file['name'] ) );
+                if ( empty( $file_info['type'] ) ) {
+                    continue;
+                }
+                
+                $upload_overrides = [
+                    'test_form' => false
+                ];
+                
+                $movefile = wp_handle_upload( $file, $upload_overrides );
         
-                    $file = compact('name', 'type', 'tmp_name', 'error', 'size');
-        
-                    $upload_overrides = ['test_form' => false];
-                    $movefile = wp_handle_upload($file, $upload_overrides);
-        
-                    if ($movefile && !isset($movefile['error'])) {
-                        $uploaded_image_urls[] = esc_url_raw($movefile['url']);
-                    }
+                if ($movefile && !isset($movefile['error'])) {
+                    $uploaded_image_urls[] = esc_url_raw($movefile['url']);
                 }
             }
         }
