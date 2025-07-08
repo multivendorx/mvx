@@ -29,6 +29,12 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
         <li><strong><?php _e( 'Additional Information', 'multivendorx' ); ?>:</strong> <span class="text"><?php echo $refund_details['addi_info']; ?></span></li>
         <li><strong><?php _e( 'Refund Status', 'multivendorx' ); ?>:</strong> <span class="text"><?php echo $refund_details['status']; ?></span></li>
         <li><strong><?php _e( 'Refund Product', 'multivendorx' ); ?>:</strong> <span class="text"><?php echo implode( ',', $refund_details['refund_product'] ); ?></span></li>
+        <li>
+            <strong><?php _e('Uploaded Product Image', 'multivendorx'); ?>:</strong><br/>
+            <?php foreach ($refund_details['product_img_urls'] as $img_url) : ?>
+                <img src="<?php echo esc_url($img_url); ?>" style="max-width: 200px; margin: 5px;" alt="Uploaded image" />
+            <?php endforeach; ?>
+        </li>
 		</ul>
     <?php }else{ ?>
     <p><?php printf(esc_html__( 'Your refund request for order <a href="%s">#%s</a> is %s', 'multivendorx' ), esc_url( $order->get_view_order_url() ), $order->get_id(), $refund_details['status'] ); 
