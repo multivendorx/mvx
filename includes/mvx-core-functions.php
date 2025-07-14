@@ -5634,42 +5634,42 @@ if (!function_exists('mvx_admin_backend_settings_fields_details')) {
                         array(
                             'key'=> "fixed",
                             'label'=> __('Fixed Amount', 'multivendorx'),
-                            'value'=> __('fixed', 'multivendorx'),
+                            'value'=> 'fixed'
                         ),
                         array(
                             'key'=> "percent",
                             'label'=> __('Percentage', 'multivendorx'),
-                            'value'=> __('percent', 'multivendorx'),
+                            'value'=> 'percent',
                         ),
                         array(
                             'key'=> "fixed_with_percentage",
                             'label'=> __('%age + Fixed (per transaction)', 'multivendorx'),
-                            'value'=> __('fixed_with_percentage', 'multivendorx'),
+                            'value'=> 'fixed_with_percentage',
                         ),
                         array(
                             'key'=> "fixed_with_percentage_qty",
                             'label'=> __('%age + Fixed (per unit)', 'multivendorx'),
-                            'value'=> __('fixed_with_percentage_qty', 'multivendorx'),
+                            'value'=> 'fixed_with_percentage_qty'
                         ),
                         array(
                             'key'=> "commission_by_product_price",
                             'label'=> __('Commission By Product Price', 'multivendorx'),
-                            'value'=> __('commission_by_product_price', 'multivendorx'),
+                            'value'=> 'commission_by_product_price'
                         ),
                         array(
                             'key'=> "commission_by_purchase_quantity",
                             'label'=> __('Commission By Purchase Quantity', 'multivendorx'),
-                            'value'=> __('commission_by_purchase_quantity', 'multivendorx'),
+                            'value'=> 'commission_by_purchase_quantity',
                         ),
                         array(
                             'key'=> "fixed_with_percentage_per_vendor",
                             'label'=> __('%age + Fixed (per vendor)', 'multivendorx'),
-                            'value'=> __('fixed_with_percentage_per_vendor', 'multivendorx'),
+                            'value'=> 'fixed_with_percentage_per_vendor',
                         ),
                         array(
                             'key'=> "commission_calculation_on_tax",
                             'label'=> __('Commission Calculation on Tax', 'multivendorx'),
-                            'value'=> __('commission_calculation_on_tax', 'multivendorx'),
+                            'value'=> 'commission_calculation_on_tax',
                         ),
                     ),
                     'database_value' => '',
