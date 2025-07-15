@@ -100,6 +100,14 @@ class mvx_transaction {
             'show_in_admin_status_list' => true,
             'label_count' => _n_noop('Canceled <span class="count">(%s)</span>', 'Canceled <span class="count">(%s)</span>', 'multivendorx'),
         ));
+        register_post_status( 'wc-refund-requested', array(
+            'label'                     => _x( 'Refund Requested', 'Order status', 'multivendorx' ),
+            'public'                    => true,
+            'exclude_from_search'       => false,
+            'show_in_admin_all_list'    => true,
+            'show_in_admin_status_list' => true,
+            'label_count'               => _n_noop( 'Refund Requested (%s)', 'Refund Requested (%s)', 'multivendorx' ),
+        ) );
     }
 
     /**
