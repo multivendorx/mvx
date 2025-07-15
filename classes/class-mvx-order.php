@@ -1584,6 +1584,7 @@ class MVX_Order {
                     <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                         <label for="product_img"><?php _e('Upload an image of the product', 'multivendorx'); ?></label>
                         <input type="file" class="woocommerce-Input input-img" name="product_img[]" id="product_img" accept="image/jpeg, image/png, image/gif, image/webp" multiple>
+                        <small style="display:block; color:#666;"><?php _e('You can select multiple images.', 'multivendorx'); ?></small>
                     </p>
 
                     <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
