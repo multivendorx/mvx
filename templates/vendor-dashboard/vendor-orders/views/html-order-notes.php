@@ -27,7 +27,7 @@ global $MVX;
                 // Load Thickbox JS/CSS in custom views (like vendor dashboard)
                 add_thickbox();
             ?>
-                <div class="refund-image-wrap" style="margin-bottom: 15px;">
+                <div class="refund-image-wrap" style="margin: 22px 0 15px 22px">
                     <h4><?php esc_html_e( 'Refund Images:', 'multivendorx' ); ?></h4>
                     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                         <?php foreach ( $image_ids as $attachment_id ) :
