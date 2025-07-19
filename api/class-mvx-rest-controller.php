@@ -4137,6 +4137,9 @@ class MVX_REST_API {
             ]
         ];
 
+        $every_where = array('label'=> __('Everywhere Else', 'multivendorx'), 'value' => 'everywhere' );
+        $country_list[] = $every_where;
+
         $settings_fields_data['country-shipping'] =   [
                 [
                     'label' => __('Default Shipping Price', 'multivendorx'), 
