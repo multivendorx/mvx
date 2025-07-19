@@ -8390,3 +8390,7 @@ ul.select-store-details li input {
   border: 1px solid #D3DBE2;
   border-top: 0;
 }/*# sourceMappingURL=vendor_dashboard.css.map */
+
+#TB_window #TB_closeWindow{
+  height: 40px;
+}
