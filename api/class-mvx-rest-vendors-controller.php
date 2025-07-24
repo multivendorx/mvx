@@ -271,8 +271,13 @@ class MVX_REST_API_Vendors_Controller extends WC_REST_Controller {
     	$rating_count = $vendor_review_info['total_rating'];
     	$vendor = get_mvx_vendor($method->id);
     	$args = array(
-            'author' => $method->id,
             'post_status' => 'any',
+			'meta_query' => array(
+				array(
+					'key' => '_vendor_id',
+					'value' => $method->id,
+				),
+			)
             
         );
         $mvx_vendor_followed_by_customer = get_user_meta( $method->id, 'mvx_vendor_followed_by_customer', true ) ? get_user_meta( $method->id, 'mvx_vendor_followed_by_customer', true ) : array();
