@@ -18,6 +18,7 @@ if (!class_exists('WC_Email_Admin_New_Vendor_Account')) :
      */
     class WC_Email_Admin_New_Vendor_Account extends WC_Email {
 
+        var $user_email;
         /**
          * Constructor
          */
