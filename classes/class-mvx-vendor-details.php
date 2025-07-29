@@ -16,6 +16,7 @@ class MVX_Vendor {
     public $term;
     public $user_data;
     public $shipping_class_id;
+    public $term_id;
 
     /**
      * Get the vendor if UserID is passed, otherwise the vendor is new and empty.

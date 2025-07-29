@@ -21,6 +21,7 @@ if (!class_exists('WC_Email_Vendor_New_Account')) :
         var $user_login;
         var $user_email;
         var $user_pass;
+        var $password_generated;
 
         /**
          * Constructor
