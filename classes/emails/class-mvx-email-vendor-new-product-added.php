@@ -21,6 +21,10 @@ if (!class_exists('WC_Email_Vendor_New_Product_Added')) :
         var $user_login;
         var $user_email;
         var $user_pass;
+        var $product_name;
+        var $vendor_name;
+        var $post_id;
+        var $post_type;
 
         /**
          * Constructor

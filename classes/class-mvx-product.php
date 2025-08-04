@@ -1042,7 +1042,7 @@ class MVX_Product {
                             wp_delete_object_term_relationships($product, $MVX->taxonomy->taxonomy_name);
                             $term = get_term($vendor->term_id, $MVX->taxonomy->taxonomy_name);
                             //wp_set_post_terms($post_id, $term->name, $MVX->taxonomy->taxonomy_name, false);
-                            if($term)
+                            if(! is_wp_error( $term ) && isset( $term->term_id ))
                                 wp_set_object_terms($product, (int) $term->term_id, $MVX->taxonomy->taxonomy_name, true);
                             $vendor = get_mvx_vendor_by_term($vendor->term_id);
                             if (!wp_is_post_revision($product) && $vendor) {
