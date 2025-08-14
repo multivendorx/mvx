@@ -505,7 +505,7 @@ $banner = $vendor->get_image('banner') ? $vendor->get_image('banner') : $MVX->pl
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-sm-3 col-md-3 twitter"><?php _e('Twitter', 'multivendorx'); ?></label>
+                        <label class="control-label col-sm-3 col-md-3 twitter"><?php _e('X', 'multivendorx'); ?></label>
                         <div class="col-md-6 col-sm-9">
                             <input class="form-control" type="url"   name="vendor_twitter_profile" value="<?php echo isset($vendor_twitter_profile['value']) ? $vendor_twitter_profile['value'] : ''; ?>">
                         </div>  
