@@ -2,10 +2,10 @@
 Contributors: wcmp, purnendu
 Tags: WooCommerce multivendor marketplace, WooCommerce marketplace, multi vendor, multivendor, multivendor marketplace
 Donate link: http://multivendorx.com/donate/
-Requires at least: 5.4
+Requires at least: 6.0
 Tested up to: 6.8.2
 Requires PHP: 8.0
-Stable tag: 4.2.30
+Stable tag: 4.2.31
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -243,6 +243,11 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/m
 14. Show Multiple Seller in Single Product.
 
 == Changelog ==
+
+= 4.2.31 - 2025-08-19 =
+* Added     - Compatibility of WooCommerce 10.1.0.
+* Fixed     - Refund calculation issue with tax #1010.
+* Fixed     - Coupon redirection issue from the vendor’s order detail page #1001.
 
 = 4.2.30 - 2025-08-06 =
 * Fixed     - SPMV Layout issue #1003.
