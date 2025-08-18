@@ -70,7 +70,7 @@ class MVX_Order {
             add_action( 'woocommerce_ajax_order_items_added',array($this, 'woocommerce_ajax_order_items_added'), 10, 2 );
             add_action( 'woocommerce_before_delete_order_item',array($this, 'woocommerce_before_delete_order_item') );
             // Order Refund
-            add_action('woocommerce_order_refunded', array($this, 'mvx_order_refunded'), 10, 2);
+            // add_action('woocommerce_order_refunded', array($this, 'mvx_order_refunded'), 10, 2);
             add_action('woocommerce_refund_deleted', array($this, 'mvx_refund_deleted'), 10, 2);
             // Customer Refund request
             add_action( 'woocommerce_order_details_after_order_table', array( $this, 'mvx_refund_btn_customer_my_account'), 10 );
