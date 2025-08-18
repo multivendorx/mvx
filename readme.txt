@@ -1,6 +1,6 @@
-=== MultiVendorX - WooCommerce Multivendor Marketplace Solutions ===
+=== MultiVendorX - WooCommerce Multivendor, WooCommerce Marketplace Solutions ===
 Contributors: wcmp, purnendu
-Tags: WooCommerce multivendor marketplace, marketplace, multi vendor, multivendor, multivendor marketplace
+Tags: WooCommerce multivendor marketplace, WooCommerce marketplace, multi vendor, multivendor, multivendor marketplace
 Donate link: http://multivendorx.com/donate/
 Requires at least: 5.4
 Tested up to: 6.8.2
