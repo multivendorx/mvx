@@ -9,7 +9,7 @@ Stable tag: 4.2.31
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-MultiVendorX: WordPress multivendor plugin to build your dream marketplace. Top-rated multi-vendor plugin to laucn your dream WooCommerce marketplace.
+MultiVendorX: WordPress multivendor plugin to build your dream marketplace. Top-rated multi-vendor plugin to launch your dream WooCommerce marketplace.
 
 == Description ==
 
