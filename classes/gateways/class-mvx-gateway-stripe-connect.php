@@ -245,7 +245,8 @@ class MVX_Gateway_Stripe_Connect extends MVX_Payment_Gateway {
                     $token_request_body = array(
                         'client_id' => $client_id,
                         'grant_type' => 'authorization_code',
-                        'code' => $code
+                        'code' => $code,
+                        'service_agreement' => 'recipient'
                     );
 
                     Stripe::setApiKey($secret_key);
