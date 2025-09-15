@@ -5,7 +5,7 @@ Donate link: http://multivendorx.com/donate/
 Requires at least: 6.0
 Tested up to: 6.8.2
 Requires PHP: 8.0
-Stable tag: 4.2.32
+Stable tag: 4.2.33
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -243,6 +243,10 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/m
 14. Show Multiple Seller in Single Product.
 
 == Changelog ==
+
+= 4.2.33 - 2025-09-16 =
+* Fixed     - Issue with images added by vendors in the Message to Buyers section of their dashboard were not displaying properly #1018.
+* Fixed     - Issue with admin products not showing on the cart page when the Display Product Seller setting was enabled #1019.
 
 = 4.2.32 - 2025-09-02 =
 * Added     - Compatibility of WooCommerce 10.1.2.

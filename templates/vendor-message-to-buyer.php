@@ -107,7 +107,7 @@ global $MVX;
                     <?php } ?>                    
                 </td>
                 <?php if ($vendor_message_to_buyer) { ?>    
-                    <td><?php echo esc_html($vendor_message_to_buyer); ?></td>
+                    <td><?php echo wp_kses_post($vendor_message_to_buyer); ?></td>
                 <?php } ?>
             </tr>
         <?php
