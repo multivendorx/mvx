@@ -3579,9 +3579,9 @@ if ( ! function_exists( 'mvx_get_post_permalink_html' ) ) {
             $type = __('product', 'multivendorx');
         }
         if ( false === strpos( $view_link, 'preview=true' ) ) {
-            $return .= '<label>' . __( sprintf( __('View %s', 'multivendorx'), $type ) ) . ":</label>\n";
+            $return .= '<label>' . sprintf( __('View %s', 'multivendorx'), $type ) . ":</label>\n";
         } else {
-            $return .= '<label>' . __( sprintf( __('View %s', 'multivendorx'), $type ) ) . ":</label>\n";
+            $return .= '<label>' . sprintf( __('View %s', 'multivendorx'), $type ) . ":</label>\n";
         }
         $return .= '<span id="afm-' . $post_type . '-permalink"><a href="' . esc_url( $view_link ) . '"' . $preview_target . '>' . $display_link . "</a></span>";
 
