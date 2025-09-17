@@ -4,7 +4,7 @@ class MVX_Elementor_Templates {
 
 	public function __construct() {
 		add_filter( 'elementor/api/get_templates/body_args', [ self::class, 'add_http_request_filter' ] );
-		add_filter( 'option_' . \Elementor\Api::LIBRARY_OPTION_KEY, [ self::class, 'add_template_library' ] );
+		add_filter( 'option_elementor_remote_info_library', [ self::class, 'add_template_library' ] );
 		add_action( 'woocommerce_api_mvx-template-preview-9000001', [ self::class, 'template_preview_9000001' ] );
 	}
 
