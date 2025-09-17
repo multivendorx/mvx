@@ -2739,10 +2739,10 @@ class MVX_Product {
                 $min_quantity = $product_settings['min_quantity'];
                 if ($max_quantity > 0 && $cart_item['quantity'] > $max_quantity) {
                     WC()->cart->set_quantity($cart_item_key, $max_quantity);  // Set quantity to max
-                    wc_add_notice(__('You can only purchase a maximum of ' . $max_quantity . ' of this item.'), 'error');
+                    wc_add_notice( sprintf( __( 'You can only purchase a maximum of %s of this item.', 'multivendorx' ), $max_quantity ), 'error');
                 } elseif ($min_quantity > 0 && $cart_item['quantity'] < $min_quantity) {
                     WC()->cart->set_quantity($cart_item_key, $min_quantity);  // Set quantity to min
-                    wc_add_notice(__('You can only purchase a minimum of ' . $min_quantity . ' of this item.'), 'error');
+                    wc_add_notice( sprintf( __( 'You can only purchase a minimum of %s of this item.', 'multivendorx' ), $min_quantity ), 'error');
                 }
             }
         }
