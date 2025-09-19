@@ -1188,7 +1188,7 @@ Class MVX_Admin_Dashboard {
                 if ($fieldkey == "vendor_page_slug" && !empty($post[$fieldkey])) {
                     if ($vendor && !$vendor->update_page_slug(wc_clean($_POST[$fieldkey]))) {
                         if (is_admin()) {
-                            echo _e('Slug already exists', 'multivendorx');
+                            _e('Slug already exists', 'multivendorx');
                         } else {
                             $err_msg = __('Slug already exists', 'multivendorx');
                             return $err_msg;
@@ -1200,7 +1200,7 @@ Class MVX_Admin_Dashboard {
                 }
                 if ($fieldkey == "vendor_page_slug" && empty($post[$fieldkey])) {
                     if (is_admin()) {
-                        echo _e('Slug can not be empty', 'multivendorx');
+                        _e('Slug can not be empty', 'multivendorx');
                     } else {
                         $err_msg = __('Slug can not be empty', 'multivendorx');
                         return $err_msg;
@@ -1236,7 +1236,7 @@ Class MVX_Admin_Dashboard {
                 }
                 if ($fieldkey == 'vendor_page_title' && empty($post[$fieldkey])) {
                     if (is_admin()) {
-                        echo _e('Shop Title can not be empty', 'multivendorx');
+                        _e('Shop Title can not be empty', 'multivendorx');
                     } else {
                         $err_msg = __('Shop Title can not be empty', 'multivendorx');
                         return $err_msg;
@@ -1245,7 +1245,7 @@ Class MVX_Admin_Dashboard {
                 if ($fieldkey == 'vendor_page_title') {
                     if (!$vendor->update_page_title(wc_clean($post[$fieldkey]))) {
                         if (is_admin()) {
-                            echo _e('Shop Title Update Error', 'multivendorx');
+                            _e('Shop Title Update Error', 'multivendorx');
                         } else {
                             $err_msg = __('Shop Title Update Error', 'multivendorx');
                             return $err_msg;
