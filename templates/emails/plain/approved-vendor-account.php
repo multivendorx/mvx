@@ -22,7 +22,7 @@ echo sprintf( __( "Application Status: %s", 'multivendorx' ), 'Approved' );
 echo '\n';
 echo sprintf( __( "Applicant Username: %s", 'multivendorx' ), $user_login ); 
 echo '\n';
-echo _e('You have been cleared for landing! Congratulations and welcome aboard!', 'multivendorx');
+_e('You have been cleared for landing! Congratulations and welcome aboard!', 'multivendorx');
 
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 if ($additional_content) {
