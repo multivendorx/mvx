@@ -45,7 +45,7 @@ class StoreGetSupport extends MVX_Elementor_TagBase {
     public function render() {
     	global $MVX;
         if (mvx_is_store_page()) {
-        	echo esc_html_e('Get Support', 'multivendorx');
+        	esc_html_e('Get Support', 'multivendorx');
         } else {
             return;
         }
