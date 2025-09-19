@@ -902,7 +902,7 @@ class MVX_Product {
          <?php endif; 
          $log_statuses = apply_filters('admin_product_logs_status', array('pending', 'publish'));
          if( in_array($post->post_status, $log_statuses) ) { ?>
-             <div><b><?php echo esc_html_e( 'Communication Log', 'multivendorx' ); ?></b></div>
+             <div><b><?php esc_html_e( 'Communication Log', 'multivendorx' ); ?></b></div>
              <ul class="order_notes">
                  <?php
                  if ($notes) {
