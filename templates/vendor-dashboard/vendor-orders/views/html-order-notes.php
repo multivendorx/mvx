@@ -20,7 +20,32 @@ global $MVX;
     </div>
     <div class="panel-body">
         <?php
-        if (apply_filters('is_vendor_can_view_order_notes', true, $vendor->id)) {
+            $image_ids = $order->get_meta( '_customer_refund_product_img_ids', true );
+
+            if ( ! empty( $image_ids ) && is_array( $image_ids ) ) :
+
+                // Load Thickbox JS/CSS in custom views (like vendor dashboard)
+                add_thickbox();
+            ?>
+                <div class="refund-image-wrap" style="margin: 22px 0 15px 22px">
+                    <h4><?php esc_html_e( 'Refund Images:', 'multivendorx' ); ?></h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <?php foreach ( $image_ids as $attachment_id ) :
+                            $thumb_url = wp_get_attachment_image_url( $attachment_id, 'thumbnail' );
+                            $full_url  = wp_get_attachment_url( $attachment_id );
+
+                            if ( $thumb_url && $full_url ) : ?>
+                                <a href="<?php echo esc_url( $full_url ); ?>?TB_iframe=true&width=600&height=550" class="thickbox" rel="refund-images">
+                                    <img src="<?php echo esc_url( $thumb_url ); ?>" style="width: 70px; height: 70px; object-fit: cover; border-radius: 4px;" />
+                                </a>
+                            <?php endif;
+                        endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <?php
+            if (apply_filters('is_vendor_can_view_order_notes', true, $vendor->id)) {
+
             $args = array(
                 'order_id' => $order->get_id(),
             );

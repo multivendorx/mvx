@@ -31,7 +31,7 @@ abstract class MVX_Payment_Gateway {
     }
 
     public function record_transaction() {
-        if ($this->transaction_mode == 'manual' && $this->payment_gateway == 'direct_bank') {
+        if ( ( $this->transaction_mode == 'manual' && $this->payment_gateway == 'direct_bank' ) || ( $this->transaction_mode == 'delayed' && $this->payment_gateway == 'paypal_marketplace' ) ) {
             $commission_status = 'mvx_processing';
         } else {
             $commission_status = 'mvx_completed';

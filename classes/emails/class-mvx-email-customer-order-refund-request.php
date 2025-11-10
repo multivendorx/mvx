@@ -83,6 +83,7 @@ if (!class_exists('WC_Email_Customer_Refund_Request')) :
                     'admin_reason' => isset( $refund_details['admin_reason'] ) ? $refund_details['admin_reason'] : '',
                     'status' => $this->status,
                     'refund_product' => $product_array,
+                    'product_img_urls' => $refund_details['product_img_urls'],
                 );
 
                 $this->refund_details = $details;

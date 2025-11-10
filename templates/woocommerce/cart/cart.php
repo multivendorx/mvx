@@ -75,7 +75,9 @@ function vendor_table($vendor_id){
 
     // show vendor name
     $vendor_info = get_mvx_vendor($vendor_id);
-    echo '<h3>'.esc_html__('Products sold by ','multivendorx').$vendor_info->page_title.'</h3>';
+    if ($vendor_info) {
+        echo '<h3>'.esc_html__('Products sold by ','multivendorx').$vendor_info->page_title.'</h3>';
+    }
     ?>
 
     <table class="shop_table shop_table_responsive cart woocommerce-cart-form__contents" cellspacing="0">
@@ -96,7 +98,8 @@ function vendor_table($vendor_id){
             foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
 
                 // if vendor is not vendor id, skip.
-                $product_vendor_id = get_mvx_product_vendors($cart_item['product_id'])->id ?? '';
+                $product_vendor_id = get_mvx_product_vendors($cart_item['product_id']) ?? '';
+                $product_vendor_id = $product_vendor_id ? $product_vendor_id->id : 'admin';
                 if ($vendor_id != $product_vendor_id){
                     continue;
                 }
@@ -209,7 +212,7 @@ function get_cart_vendors(){
     if (is_object($cart)){
         foreach($cart->get_cart() as $cart_item){
             $vendor = get_mvx_product_vendors($cart_item['product_id']);
-            $vendor_id = $vendor ? $vendor->id : '';
+            $vendor_id = $vendor ? $vendor->id : 'admin';
             if (!empty($vendor_id)) {
                 array_push($vendors, $vendor_id);
             }

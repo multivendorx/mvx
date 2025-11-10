@@ -129,12 +129,7 @@ if ( wc_tax_enabled() ) {
                                                 <li class="<?php echo esc_attr($class); ?>">
                                                     <?php if ($post_id) : ?>
                                                         <?php
-                                                        $post_url = apply_filters('mvx_vendor_order_item_coupon_url', add_query_arg(
-                                                                        array(
-                                                            'post' => $post_id,
-                                                            'action' => 'edit',
-                                                                        ), admin_url('post.php')
-                                                                ), $item, $order);
+                                                        $post_url = apply_filters('mvx_vendor_order_item_coupon_url', esc_url(mvx_get_vendor_dashboard_endpoint_url(get_mvx_vendor_settings('mvx_add_coupon_endpoint', 'seller_dashbaord', 'add-coupon'), $post_id)), $item, $order);
                                                         ?>
                                                         <a href="<?php echo esc_url($post_url); ?>" class="tips" data-tip="<?php echo esc_attr(wc_price($item->get_discount(), array('currency' => $order->get_currency()))); ?>">
                                                             <span><?php echo esc_html($item->get_code()); ?></span>

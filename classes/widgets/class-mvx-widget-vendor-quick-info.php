@@ -271,12 +271,13 @@ class DC_Widget_Quick_Info_Widget extends WP_Widget {
                 $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
                 $recaptcha_response = isset( $_POST['recaptchav3_response']) ? wc_clean($_POST['recaptchav3_response']) : '';
     
-                $recaptcha = file_get_contents( $recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response );
-                $recaptcha = json_decode( $recaptcha );
-    
-                if ( !$recaptcha->success || $recaptcha->score < 0.5 ) {
+                $response = wp_remote_get($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);
+                $recaptcha = json_decode($response['body']);
+
+                if ($recaptcha->success && $recaptcha->score >= 0.5) {
+                    return $recaptcha->score;
+                } else {
                     wc_add_notice(__( 'Please Verify Recaptcha', 'multivendorx' ), 'error' );
-                    return false;
                 }
             }
         }

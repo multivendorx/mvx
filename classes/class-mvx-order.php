@@ -70,7 +70,7 @@ class MVX_Order {
             add_action( 'woocommerce_ajax_order_items_added',array($this, 'woocommerce_ajax_order_items_added'), 10, 2 );
             add_action( 'woocommerce_before_delete_order_item',array($this, 'woocommerce_before_delete_order_item') );
             // Order Refund
-            add_action('woocommerce_order_refunded', array($this, 'mvx_order_refunded'), 10, 2);
+            // add_action('woocommerce_order_refunded', array($this, 'mvx_order_refunded'), 10, 2);
             add_action('woocommerce_refund_deleted', array($this, 'mvx_refund_deleted'), 10, 2);
             // Customer Refund request
             add_action( 'woocommerce_order_details_after_order_table', array( $this, 'mvx_refund_btn_customer_my_account'), 10 );
@@ -96,6 +96,7 @@ class MVX_Order {
             add_filter( "woocommerce_rest_orders_prepare_object_query", array($this, 'mvx_suborder_hide' ), 99 , 2 );
             // customer list report section
             add_filter( "woocommerce_customer_get_total_spent_query", array($this, 'woocommerce_customer_exclude_suborder_query' ), 10 , 2 );
+            add_filter( 'wc_order_statuses', array( $this, 'mvx_add_refund_requested_to_order_statuses') );
             //refund table action
             $this->mvx_refund_table_action();
         }
@@ -1526,7 +1527,7 @@ class MVX_Order {
         ?>
         <p><button type="button" class="button wp-element-button" id="cust_request_refund_btn" name="cust_request_refund_btn" value="<?php echo $refund_button_text; ?>"><?php echo $refund_button_text; ?></button></p>
         <div id="mvx-myac-order-refund-wrap" class="mvx-myac-order-refund-wrap">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 <?php wp_nonce_field('customer_request_refund', 'cust-request-refund-nonce'); ?>
                 <fieldset>
                     <label class="section-heading"><?php echo __('Choose the product(s) you want a refund for', 'multivendorx'); ?></label>
@@ -1581,6 +1582,11 @@ class MVX_Order {
                         <label for="additional_info"><?php _e('Provide additional information', 'multivendorx'); ?></label>
                         <textarea class="woocommerce-Input input-text" name="refund_request_addi_info" id="refund_request_addi_info"></textarea>
                     </p>
+                    <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                        <label for="product_img"><?php _e('Upload an image of the product', 'multivendorx'); ?></label>
+                        <input type="file" class="woocommerce-Input input-img" name="product_img[]" id="product_img" accept="image/jpeg, image/png, image/gif, image/webp" multiple>
+                        <small style="display:block; color:#666;"><?php _e('You can select multiple images.', 'multivendorx'); ?></small>
+                    </p>
 
                     <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                         <button type="submit" class="button wp-element-button" name="cust_request_refund_sbmt" value="<?php _e('Submit', 'multivendorx'); ?>"><?php _e('Submit', 'multivendorx'); ?></button>
@@ -1611,59 +1617,152 @@ class MVX_Order {
 
     public function mvx_handler_cust_requested_refund() {
         global $wp;
-        $nonce_value = isset($_REQUEST['cust-request-refund-nonce']) ? wc_get_var( $_REQUEST['cust-request-refund-nonce'], wc_get_var( $_REQUEST['_wpnonce'], '' ) ) : ''; // @codingStandardsIgnoreLine.
-
-		if ( ! wp_verify_nonce( $nonce_value, 'customer_request_refund' ) ) {
-			return;
-        }
-        // If no refund reason is selected
-        if ( !isset( $_REQUEST['refund_reason_option'] ) ) {
-            wc_add_notice( __( 'Kindly choose a refund reason', 'multivendorx' ) , 'error' );
+    
+        $nonce_value = isset($_REQUEST['cust-request-refund-nonce']) ? wc_get_var($_REQUEST['cust-request-refund-nonce'], wc_get_var($_REQUEST['_wpnonce'], '')) : '';
+        if ( ! wp_verify_nonce( $nonce_value, 'customer_request_refund' ) ) {
             return;
         }
-        if( !isset( $wp->query_vars['view-order'] ) ) return;
+    
+        if ( ! isset( $_REQUEST['refund_product'] ) ) {
+            wc_add_notice( __( 'Kindly choose a product', 'multivendorx' ), 'error' );
+            return;
+        }
+    
+        if ( ! isset( $_REQUEST['refund_reason_option'] ) ) {
+            wc_add_notice( __( 'Kindly choose a refund reason', 'multivendorx' ), 'error' );
+            return;
+        }
+    
+        if ( ! isset( $wp->query_vars['view-order'] ) ) return;
+    
         $order_id = $wp->query_vars['view-order'];
         $order = wc_get_order( $order_id );
-        $reason_option = isset( $_REQUEST['refund_reason_option'] ) ? wc_clean( wp_unslash($_REQUEST['refund_reason_option'])) : '';
-        $refund_reason_other = isset( $_REQUEST['refund_reason_other'] ) ? wc_clean( wp_unslash($_REQUEST['refund_reason_other'])) : '';
-        $refund_request_addi_info = isset( $_REQUEST['refund_request_addi_info'] ) ? wc_clean( wp_unslash($_REQUEST['refund_request_addi_info'])) : '';
+    
+        $reason_option           = wc_clean( wp_unslash( $_REQUEST['refund_reason_option'] ?? '' ) );
+        $refund_reason_other     = wc_clean( wp_unslash( $_REQUEST['refund_reason_other'] ?? '' ) );
+        $refund_request_addi_info = wc_clean( wp_unslash( $_REQUEST['refund_request_addi_info'] ?? '' ) );
+        $refund_product          = wc_clean( $_REQUEST['refund_product'] ?? '' );
+    
         $refund_settings = mvx_get_option( 'mvx_refund_management_tab_settings', true );
-        $refund_reason_options = ( isset( $refund_settings['refund_order_msg'] ) && $refund_settings['refund_order_msg'] ) ? explode( "||", $refund_settings['refund_order_msg'] ) : array();
-        $refund_reason = ( $reason_option == 'others' ) ? $refund_reason_other : (isset( $refund_reason_options[$reason_option] ) ? $refund_reason_options[$reason_option] : '');
-        $refund_product = isset($_REQUEST['refund_product']) ? wc_clean($_REQUEST['refund_product']) : '' ;
-        $refund_details = array(
-            'refund_reason' => $refund_reason,
-            'addi_info' => $refund_request_addi_info,
-            'refund_product'=> $refund_product,
-        );
-        // update customer refunt request 
-        $order->update_meta_data('_customer_refund_order', wc_clean( wp_unslash( 'refund_request' ) ));
-        $order->update_meta_data('_customer_refund_reason', wc_clean( wp_unslash( $refund_reason ) ));
-        $order->update_meta_data('_customer_refund_product', wc_clean( wp_unslash($refund_product ) ));
+        $refund_reason_options = ! empty( $refund_settings['refund_order_msg'] ) ? explode( '||', $refund_settings['refund_order_msg'] ) : [];
+        $refund_reason = $reason_option === 'others' ? $refund_reason_other : ( $refund_reason_options[$reason_option] ?? '' );
+    
+        $uploaded_image_urls = [];
+        $attach_ids = [];
+        
+        if ( isset( $_FILES['product_img'] ) && ! empty( $_FILES['product_img']['name'][0] ) ) {
+            if ( ! function_exists( 'wp_handle_upload' ) ) {
+                require_once ABSPATH . 'wp-admin/includes/file.php';
+            }
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+        
+            $max_file_size = 10 * 1024 * 1024; // 10MB
+            $allowed_mimes = [
+                'jpg|jpeg|jpe' => 'image/jpeg',
+                'gif'          => 'image/gif',
+                'png'          => 'image/png',
+                'webp'         => 'image/webp',
+            ];
+        
+            $file_keys = array_keys( $_FILES['product_img']['name'] );
+        
+            foreach ( $file_keys as $index ) {
+                if ( $_FILES['product_img']['error'][ $index ] !== UPLOAD_ERR_OK ) {
+                    continue;
+                }
+        
+                if ( $_FILES['product_img']['size'][ $index ] > $max_file_size ) {
+                    continue;
+                }
+        
+                $file_type = wp_check_filetype( $_FILES['product_img']['name'][ $index ], $allowed_mimes );
+                if ( empty( $file_type['type'] ) ) {
+                    continue;
+                }
+        
+                $file = [
+                    'name'     => sanitize_file_name( $_FILES['product_img']['name'][ $index ] ),
+                    'type'     => $_FILES['product_img']['type'][ $index ],
+                    'tmp_name' => $_FILES['product_img']['tmp_name'][ $index ],
+                    'error'    => $_FILES['product_img']['error'][ $index ],
+                    'size'     => $_FILES['product_img']['size'][ $index ],
+                ];
+        
+                $upload = wp_handle_upload( $file, [ 'test_form' => false ] );
+        
+                if ( $upload && ! isset( $upload['error'] ) ) {
+                    $uploaded_image_urls[] = esc_url_raw( $upload['url'] );
+        
+                    $attachment = [
+                        'guid'           => $upload['url'],
+                        'post_mime_type' => $upload['type'],
+                        'post_title'     => pathinfo( $file['name'], PATHINFO_FILENAME ),
+                        'post_content'   => '',
+                        'post_status'    => 'inherit',
+                    ];
+        
+                    $attach_id = wp_insert_attachment( $attachment, $upload['file'] );
+        
+                    if ( $attach_id ) {
+                        $attach_data = wp_generate_attachment_metadata( $attach_id, $upload['file'] );
+                        wp_update_attachment_metadata( $attach_id, $attach_data );
+                        $attach_ids[] = $attach_id;
+                    }
+                }
+            }
+        }
+        
+    
+        $refund_details = [
+            'refund_reason'     => $refund_reason,
+            'addi_info'         => $refund_request_addi_info,
+            'refund_product'    => $refund_product,
+            'product_img_urls'  => $uploaded_image_urls,
+        ];
+    
+        $order->update_meta_data( '_customer_refund_order', 'refund_request' );
+        $order->update_meta_data( '_customer_refund_reason', $refund_reason );
+        $order->update_meta_data( '_customer_refund_product', $refund_product );
+        $order->update_meta_data( '_customer_refund_product_imgs', $uploaded_image_urls );
+        $order->update_meta_data( '_customer_refund_product_img_ids', $attach_ids );
+    
+        $order->set_status( 'refund-requested' );
         $order->save();
-        $comment_id = $order->add_order_note( __('Customer requested a refund ', 'multivendorx') .$order_id.' .' );
-        // user info
-        $user_info = get_userdata(get_current_user_id());
-        wp_update_comment(array('comment_ID' => $comment_id, 'comment_author' => $user_info->user_name, 'comment_author_email' => $user_info->user_email));
-
-        // parent order
+    
+        $user_info = get_userdata( get_current_user_id() );
+    
+        $comment_id = $order->add_order_note( __( 'Customer requested a refund ', 'multivendorx' ) . $order_id . '.' );
+        wp_update_comment([
+            'comment_ID'         => $comment_id,
+            'comment_author'     => $user_info->user_login,
+            'comment_author_email' => $user_info->user_email,
+        ]);
+    
         $parent_order_id = $order->get_parent_id();
-        $parent_order = wc_get_order( $parent_order_id );
-        $comment_id_parent = $parent_order->add_order_note( __('Customer requested a refund for ', 'multivendorx') .$order_id.'.'  );
-        wp_update_comment(array('comment_ID' => $comment_id_parent, 'comment_author' => $user_info->user_name, 'comment_author_email' => $user_info->user_email));
-
+        if ( $parent_order_id ) {
+            $parent_order = wc_get_order( $parent_order_id );
+            $comment_id_parent = $parent_order->add_order_note( __( 'Customer requested a refund for ', 'multivendorx' ) . $order_id . '.' );
+            wp_update_comment([
+                'comment_ID'         => $comment_id_parent,
+                'comment_author'     => $user_info->user_login,
+                'comment_author_email' => $user_info->user_email,
+            ]);
+        }
+    
         $mail = WC()->mailer()->emails['WC_Email_Customer_Refund_Request'];
-        // order vendor
         $vendor_id = $order->get_meta( '_vendor_id', true );
-        $vendor_user_info = get_userdata($vendor_id);
+        $vendor_user_info = get_userdata( $vendor_id );
         $mail->trigger( $vendor_user_info->user_email, $order_id, $refund_details );
+    
         wc_add_notice( __( 'Refund request successfully placed.', 'multivendorx' ) );
     }
+    
 
     public function mvx_refund_order_status_customer_meta($page, $order){
         if( $page && $page != 'woocommerce_page_wc-orders' ) return;
         if( !mvx_get_order( $order->get_id() ) ) return;
         add_meta_box( 'refund_status_customer', __('Customer refund status', 'multivendorx'),  array( $this, 'mvx_order_customer_refund_dd' ), $page, 'side', 'core', $order );
+        add_meta_box( 'refund_images_customer', __( 'Refund Request Images', 'multivendorx' ), array( $this, 'mvx_order_customer_refund_images' ), $page, 'side', 'core', $order );
     }
 
     public function mvx_order_customer_refund_dd($order){
@@ -1696,7 +1795,38 @@ class MVX_Order {
         </script>
         <?php
     }
-
+    public function mvx_order_customer_refund_images( $order ) {
+        $image_ids = $order->get_meta( '_customer_refund_product_img_ids', true );
+    
+        if ( empty( $image_ids ) ) {
+            echo '<p>' . esc_html__( 'No refund images uploaded by the customer.', 'multivendorx' ) . '</p>';
+            return;
+        }
+    
+        // Enqueue WordPress built-in lightbox
+        add_thickbox();
+    
+        echo '<div style="display: flex; flex-wrap: wrap; gap: 8px;">';
+    
+        foreach ( $image_ids as $attachment_id ) {
+            $thumb_url = wp_get_attachment_image_url( $attachment_id, 'thumbnail' );
+            $full_url  = wp_get_attachment_url( $attachment_id );
+    
+            if ( $thumb_url && $full_url ) {
+                printf(
+                    '<a href="%s" class="thickbox" rel="refund-images">
+                        <img src="%s" style="width:70px;height:70px;object-fit:cover;border-radius:4px;" />
+                    </a>',
+                    esc_url( $full_url ),
+                    esc_url( $thumb_url )
+                );
+            }
+        }
+    
+        echo '</div>';
+    }
+    
+    
     public function mvx_refund_order_status_save( $order_id ){
         $order = wc_get_order( $order_id );
         if( empty( $order_id ) || ( $order_id && $order->get_type() != 'shop_order' )) return;
@@ -1797,5 +1927,18 @@ class MVX_Order {
             wp_redirect( $refund_redirect_url );
             exit;
         }
+    }
+    public function mvx_add_refund_requested_to_order_statuses( $order_statuses ) {
+        $new_statuses = array();
+    
+        foreach ( $order_statuses as $key => $label ) {
+            $new_statuses[ $key ] = $label;
+    
+            if ( 'wc-on-hold' === $key ) {
+                $new_statuses['wc-refund-requested'] = _x( 'Refund Requested', 'Order status', 'multivendorx' );
+            }
+        }
+    
+        return $new_statuses;
     }
 }

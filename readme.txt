@@ -1,23 +1,24 @@
 === MultiVendorX - WooCommerce Multivendor Marketplace Solutions ===
 Contributors: wcmp, purnendu
-Tags: WooCommerce multivendor marketplace, multi seller, multi vendor, multivendor, multivendor marketplace
+Tags: marketplace, WooCommerce marketplace, multi vendor, multivendor, multivendor marketplace
 Donate link: http://multivendorx.com/donate/
-Requires at least: 5.4
-Tested up to: 6.8.1
+Requires at least: 6.0
+Tested up to: 6.8.3
 Requires PHP: 8.0
-Stable tag: 4.2.26
+Stable tag: 4.2.35
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-MultiVendorX: WordPress multivendor plugin to build your dream marketplace
+MultiVendorX: WordPress multivendor plugin to build your dream marketplace. Top-rated multi-vendor plugin to launch your dream WooCommerce marketplace.
 
 == Description ==
 
 = MULTIVENDOR MARKETPLACE PLUGIN FOR WORDPRESS – POWERED BY WOOCOMMERCE =
+= Most Recommended Multi Vendor plugin =
 Build your own multivendor marketplace in minutes-no code required.
-**MultiVendorX** is a flexible and powerful WooCommerce multivendor marketplace plugin for WordPress, built to help you launch and manage a full-featured marketplace with ease.
+**MultiVendorX** is a flexible and powerful WooCommerce multivendor marketplace plugin for WordPress, built to help you launch and manage a full-featured marketplace with ease. Whether you’re building a multi vendor store for physical goods, digital downloads, services, or rentals - MultiVendorX includes everything you need.
 
-From digital downloads to physical products, everything you need is included-even in the free version. With fast setup, seamless vendor management, and built-in commission control, MultiVendorX is designed to grow with your business. Ideal for entrepreneurs aiming to establish their own multivendor platform reminiscent of popular multivendor marketplaces like  <strong> Amazon,  eBay, Etsy,  Airbnb , or Flipkart. </strong>
+With fast setup, seamless vendor management, and built-in commission control, MultiVendorX is designed to grow with your business. Ideal for entrepreneurs aiming to establish their own multivendor platform reminiscent of popular multivendor marketplaces like  <strong> Amazon,  eBay, Etsy,  Airbnb , or Flipkart. </strong>
 
 [youtube https://youtu.be/3Pm46Z_ovLg]
 
@@ -97,7 +98,7 @@ Discover everything **MultiVendorX's Features** [here](https://multivendorx.com/
 🙆 “ Very satisfied, Easy set up and configuration, customisable according to requirement, seller dashboard with more view of sales” - [**Kevajo**](https://www.youtube.com/watch?v=oBbZGsnA-CE)
 
 
-= 🌟 Taste Victory of Advanced Features of MultiVendorX Pro: =
+= 🌟 Experience The Power of Advanced Multi Vendor Features With MultiVendorX Pro: =
 Competition requires the right toolkit. To thrive in today’s dynamic multi vendor marketplace, you need features that empower vendors and streamline woocommerce marketplace management. That’s where [MultiVendorX Pro](https://multivendorx.com/pricing/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg) comes in - a feature-rich solution built to elevate your WooCommerce marketplace.
 
 * 📋 **[Customizable Membership Plan](https://multivendorx.com/docs/knowledgebase/marketplace-memberhsip/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg)** – Offer Free, trial, or paid memberships with MultiVendorX Vendor membership. Customize fees, rates, and benefits.
@@ -124,6 +125,8 @@ Competition requires the right toolkit. To thrive in today’s dynamic multi ven
 
 Migrate to MultiVendorX Without a Hitch!
 Thinking of switching from WCFM Marketplace, WC Vendors, or Dokan Multivendor? With our [**migration tool**](https://multivendorx.com/docs/knowledgebase/migration/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg), making the move to MultiVendorX is as smooth as it gets.
+
+Whether you’re managing a small store or a large-scale multi vendor marketplace, our migration tool is built to support you every step of the way.
 
 Experience everything our multivendor marketplace plugin has to offer - risk-free. Test the waters before committing, and rest easy knowing that all your vital WordPress data is safe.
 Our seamless migration process transfers all vendor, product, and order data from your current WooCommerce marketplace plugin - whether it’s Dokan, WCFM, or WC Vendors - to MultiVendorX without data loss or downtime.
@@ -240,6 +243,46 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/m
 14. Show Multiple Seller in Single Product.
 
 == Changelog ==
+
+= 4.2.35 - 2025-11-04 =
+* Added     - Compatibility with WordPress 6.8.3.
+* Added     - Compatibility of WooCommerce 10.3.4.
+
+= 4.2.34 - 2025-10-14 =
+* Added     - Compatibility of WooCommerce 10.2.2.
+* Fixed     - Fatal error occurring when the Elementor module was enabled #1021.
+
+= 4.2.33 - 2025-09-16 =
+* Fixed     - Issue with images added by vendors in the Message to Buyers section of their dashboard were not displaying properly #1018.
+* Fixed     - Issue with admin products not showing on the cart page when the Display Product Seller setting was enabled #1019.
+
+= 4.2.32 - 2025-09-02 =
+* Added     - Compatibility of WooCommerce 10.1.2.
+* Updated   - Language file.
+
+= 4.2.31 - 2025-08-19 =
+* Added     - Compatibility of WooCommerce 10.1.0.
+* Fixed     - Refund calculation issue with tax #1010.
+* Fixed     - Coupon redirection issue from the vendor’s order detail page #1001.
+
+= 4.2.30 - 2025-08-06 =
+* Fixed     - SPMV Layout issue #1003.
+
+= 4.2.29 - 2025-08-05 =
+* Added     - Compatibility of WooCommerce 10.0.4.
+* Fixed     - ReCaptcha issue on the vendor registration form.
+* Fixed     - Vendor API order count issue.
+
+= 4.2.28 - 2025-07-22 =
+* Added     - Compatibility with WordPress 6.8.2.
+* Added     - Compatibility of WooCommerce 10.0.2.
+* Added     - Translation support for refund-related strings and introduced a new order status: "Refund Requested" #976.
+* Fixed     - Issue where the "Everywhere else" option was not appearing in the admin interface for country-wise shipping #975.
+* Fixed     - Missing validation check in the Store Policy module.
+* Updated   - Language file.
+
+= 4.2.27 - 2025-07-08 =
+* Added     - Customers can now upload images when requesting a refund from their My Account page #787.
 
 = 4.2.26 - 2025-06-24 =
 * Added     - Compatibility of WooCommerce 9.9.5.
