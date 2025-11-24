@@ -13,7 +13,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-final class MVX {
+final class MVX
+{
 
     public $plugin_url;
     public $plugin_path;
@@ -54,7 +55,7 @@ final class MVX {
     public $deprecated_hook_handlers = array();
     public $deprecated_funtions;
     public $multivendor_migration;
-    public $mvx_usage_tracker ;
+    public $mvx_usage_tracker;
     public $upgrade;
     public $hpos_is_enabled = false;
 
@@ -62,7 +63,8 @@ final class MVX {
      * Class construct
      * @param object $file
      */
-    public function __construct($file) {
+    public function __construct($file)
+    {
         $this->file = $file;
         $this->plugin_url = trailingslashit(plugins_url('', $plugin = $file));
         $this->plugin_path = trailingslashit(dirname($file));
@@ -88,51 +90,187 @@ final class MVX {
         add_action('init', array(&$this, 'init'));
 
         add_action('admin_init', array(&$this, 'mvx_admin_init'));
-        
+
         // Secure commission notes
         add_filter('comments_clauses', array(&$this, 'exclude_order_comments'), 10, 1);
         add_filter('comment_feed_where', array(&$this, 'exclude_order_comments_from_feed_where'));
-        
+
         // Add mvx namespace support along with WooCommerce.
-        add_filter( 'woocommerce_rest_is_request_to_rest_api', 'mvx_namespace_approve', 10, 1 );
+        add_filter('woocommerce_rest_is_request_to_rest_api', 'mvx_namespace_approve', 10, 1);
         // Load Vendor Shipping
-        if ( !defined('WP_ALLOW_MULTISITE')) {
-            add_action( 'woocommerce_loaded', array( &$this, 'load_vendor_shipping' ) );
-        }else{
+        if (!defined('WP_ALLOW_MULTISITE')) {
+            add_action('woocommerce_loaded', array(&$this, 'load_vendor_shipping'));
+        } else {
             $this->load_vendor_shipping();
         }
         // Disable woocommerce admin from vendor backend
         //add_filter( 'woocommerce_admin_disabled', array( &$this, 'mvx_remove_woocommerce_admin_from_vendor' ) );
 
-        add_action( 'jwt_auth_token_before_dispatch', array( &$this,'mvx_modify_jwt_auth_plugin_response' ),  20, 2 );
+        add_action('jwt_auth_token_before_dispatch', array(&$this, 'mvx_modify_jwt_auth_plugin_response'),  20, 2);
+
+        if (!get_option('_is_dismiss_mvx5_0_notice', false)) {
+            add_action('admin_notices', array($this, 'mvx_service_page_notice'));
+            add_action('wp_ajax_dismiss_mvx_servive_notice', array($this, 'dismiss_mvx_servive_notice'));
+        }
     }
 
-    public function mvx_modify_jwt_auth_plugin_response($data, $user) {
+    public function mvx_service_page_notice()
+    {
+        global $MVX;
+?>
+        <div class=" mvx_admin_new_banner">
+            <div class="mvx-beta-logo"><img src=<?php echo $MVX->plugin_url . 'assets/images/mvx-brand-logo.png'; ?> alt="beta-logo"></div>
+            <div class="mvx-banner-content">
+                <h1 class="mvx-banner-tilte">Your marketplace dream is about to get bigger.</h1>
+                <div class="mvx-paragraph-btn-wrap">
+                    <p class="mvx-banner-description">We’ve shattered old marketplace limits and built something remarkable.
+                        MultiVendorX 5.0.0 marks a new era - one platform for any marketplace vision.
+                        Think you know MultiVendorX? Get ready to be amazed.</p>
+                    <div class="buttons-wrapper" style="margin: 1rem 0; width:100%;">
+                        <a href="https://www.facebook.com/groups/226246620006065/" style="background:#fff; color: #5007aa;" target="_blank" class="mvx_btn_service_claim_now"><?php esc_html_e('Join our Facebook community to follow every update', 'multivendorx'); ?></a>
+                        <a href="https://multivendordemo.com/multivendorx/wp-admin/" target="_blank" class="mvx_btn_service_claim_now"><?php esc_html_e('Explore the beta demo', 'multivendorx'); ?></a>
+                    </div>
+                </div>
+
+                <div class="rightside">
+                    <button style="color: #fff;" onclick="dismiss_servive_notice(event);" type="button" class="notice-dismiss"></button>
+                    <script type="text/javascript">
+                        function dismiss_servive_notice(e, i) {
+                            jQuery.post(ajaxurl, {
+                                action: "dismiss_mvx_servive_notice"
+                            }, function(e) {
+                                location.reload();
+                            })
+                        }
+                    </script>
+                    <style>
+                        .mvx_admin_new_banner {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            gap: 1.5rem;
+                            padding: 1rem;
+                            border: .063rem solid #d4d1d9;
+                            margin: 3rem auto 1.5rem 0;
+                            border-radius: .25rem;
+                            width: 95%;
+                            /* background: url('<?php echo $MVX->plugin_url . 'assets/images/banner-back-color.jpg'; ?>') center/100% 100% no-repeat; */
+                            position: relative;
+                            background: #5007aa;
+                        }
+
+                        .notice-dismiss:before,
+                        .notice-dismiss:hover:before {
+                            color: #fff;
+                            opacity: .4
+                        }
+
+                        .mvx-beta-logo {
+                            width: 15%
+                        }
+
+                        .mvx_admin_new_banner img {
+                            object-fit: cover;
+                            object-position: center;
+                            height: 100%;
+                            width: 100%
+                        }
+
+                        .mvx-banner-content {
+                            width: 85%
+                        }
+
+                        .mvx-banner-content p {
+                            color: #ece8f1;
+                            font-size: 1.125rem;
+                            margin: 1rem 0
+                        }
+
+                        .mvx-banner-content p a {
+                            font-weight: 500;
+                            color: #f9f8f9;
+                            text-decoration: underline
+                        }
+
+                        .mvx-banner-content h1 {
+                            margin: 1rem 0 0;
+                            color: #f9f8fb;
+                            font-weight: 500
+                        }
+
+                        .mvx-banner-content p span {
+                            background-color: #fefbfc;
+                            color: #d2485d;
+                            padding: 0 .25rem
+                        }
+
+                        .mvx_admin_new_banner .mvx-banner-content .mvx-paragraph-btn-wrap {
+                            display: flex;
+                            align-items: center;
+                            flex-wrap: wrap;
+                            font-size: 1rem;
+                            justify-content: end
+                        }
+
+                        .mvx_admin_new_banner .mvx-banner-content .mvx-paragraph-btn-wrap .mvx_btn_service_claim_now {
+                            transition: .3s;
+                            border-radius: .25rem;
+                            padding: .594rem 1rem;
+                            cursor: pointer;
+                            background-color: #e35047;
+                            color: #f9f8fb;
+                            text-decoration: none
+                        }
+
+                        .mvx_admin_new_banner .mvx-banner-content .mvx-paragraph-btn-wrap .mvx_btn_service_claim_now:hover {
+                            text-decoration: none;
+                            background-color: #e6635b;
+                            color: #f9f8fb
+                        }
+                    </style>
+                </div>
+            </div>
+        </div>
+    <?php
+    }
+
+    public function dismiss_mvx_servive_notice()
+    {
+        $updated = update_option('_is_dismiss_mvx5_0_notice', true);
+        echo $updated;
+        die();
+    }
+
+    public function mvx_modify_jwt_auth_plugin_response($data, $user)
+    {
         $data['roles'] = $user->roles;
         $data['store_id'] = $user->ID;
         return $data;
     }
-    
-    public function exclude_order_comments($clauses) {
-        $clauses['where'] .= ( $clauses['where'] ? ' AND ' : '' ) . " comment_type != 'commission_note' ";
+
+    public function exclude_order_comments($clauses)
+    {
+        $clauses['where'] .= ($clauses['where'] ? ' AND ' : '') . " comment_type != 'commission_note' ";
         return $clauses;
     }
 
-    public function exclude_order_comments_from_feed_where($where) {
-        return $where . ( $where ? ' AND ' : '' ) . " comment_type != 'commission_note' ";
+    public function exclude_order_comments_from_feed_where($where)
+    {
+        return $where . ($where ? ' AND ' : '') . " comment_type != 'commission_note' ";
     }
 
     /**
      * Initialize plugin on WP init
      */
-    function init() {
-        if(version_compare(WC_VERSION, '8.3.0', '>=')){
+    function init()
+    {
+        if (version_compare(WC_VERSION, '8.3.0', '>=')) {
             $this->hpos_is_enabled = $this->hpos_is_enabled();
-        } 
+        }
         if (is_user_mvx_pending_vendor(get_current_vendor_id()) || is_user_mvx_rejected_vendor(get_current_vendor_id()) || is_user_mvx_vendor(get_current_vendor_id())) {
             show_admin_bar(apply_filters('mvx_show_admin_bar', false));
         }
-       
+
         // Init MVX API
         $this->init_mvx_rest_api();
         // Init library
@@ -215,61 +353,65 @@ final class MVX {
         $this->init_vendor_coupon();
         // Init Ledger
         $this->init_ledger();
-        
+
         include_once $this->plugin_path . '/includes/class-mvx-deprecated-action-hooks.php';
         include_once $this->plugin_path . '/includes/class-mvx-deprecated-filter-hooks.php';
         include_once $this->plugin_path . '/includes/mvx-deprecated-funtions.php';
         $this->deprecated_hook_handlers['actions'] = new MVX_Deprecated_Action_Hooks();
         $this->deprecated_hook_handlers['filters'] = new MVX_Deprecated_Filter_Hooks();
         // rewrite endpoint for followers details
-        add_rewrite_endpoint( 'followers', EP_ALL );
+        add_rewrite_endpoint('followers', EP_ALL);
 
         if (!wp_next_scheduled('migrate_spmv_multivendor_table') && !get_option('spmv_multivendor_table_migrated', false)) {
             wp_schedule_event(time(), 'every_5minute', 'migrate_spmv_multivendor_table');
         }
         do_action('mvx_init');
 
-         // Init Text Domain
-         $this->load_plugin_textdomain();
+        // Init Text Domain
+        $this->load_plugin_textdomain();
     }
-    
+
     // Initializing Rest API
-    function init_mvx_rest_api() {
-        include_once ($this->plugin_path . "/api/class-mvx-rest-controller.php" );
+    function init_mvx_rest_api()
+    {
+        include_once($this->plugin_path . "/api/class-mvx-rest-controller.php");
         $this->vendor_rest_api = new MVX_REST_API();
     }
-    
+
     // Initializing Packages
-    function init_packages() {
-        include_once ($this->plugin_path . "/packages/Packages.php" );
+    function init_packages()
+    {
+        include_once($this->plugin_path . "/packages/Packages.php");
         // Migration
-        include_once ($this->plugin_path . "/classes/migration/class-mvx-migration.php" );
+        include_once($this->plugin_path . "/classes/migration/class-mvx-migration.php");
         $this->multivendor_migration = new MVX_Migrator();
         // track users data
-        include_once ($this->plugin_path . "/classes/class-mvx-usage-tracker.php" );
+        include_once($this->plugin_path . "/classes/class-mvx-usage-tracker.php");
         $this->mvx_usage_tracker = new MVX_Plugin_Usage_Tracker($this->plugin_path);
     }
 
     /**
      * plugin admin init callback
      */
-    function mvx_admin_init() {
+    function mvx_admin_init()
+    {
         $previous_plugin_version = mvx_get_option('dc_product_vendor_plugin_db_version');
         /* Migrate MVX data */
         do_mvx_data_migrate($previous_plugin_version, $this->version);
     }
-    
+
     /**
      * Include required core files used in admin and on the frontend.
      */
-    public function includes() {
+    public function includes()
+    {
         /**
          * Core functionalities.
          */
-        include_once ( $this->plugin_path . "/includes/mvx-order-functions.php" );
-        include_once ( $this->plugin_path . "/includes/mvx-hooks-functions.php" );
+        include_once($this->plugin_path . "/includes/mvx-order-functions.php");
+        include_once($this->plugin_path . "/includes/mvx-hooks-functions.php");
         // Query classes
-        include_once ( $this->plugin_path . '/classes/query/class-mvx-vendor-query.php' );
+        include_once($this->plugin_path . '/classes/query/class-mvx-vendor-query.php');
     }
 
     /**
@@ -277,7 +419,8 @@ final class MVX {
      * @param type $template
      * @return type
      */
-    function template_loader($template) {
+    function template_loader($template)
+    {
         if (mvx_is_store_page()) {
             $template = $this->template->store_locate_template('taxonomy-dc-vendor-shop.php');
         }
@@ -292,11 +435,12 @@ final class MVX {
      * @access public
      * @return void
      */
-    public function load_plugin_textdomain() {
-        if ( version_compare( $GLOBALS['wp_version'], '6.7', '<' ) ) {
+    public function load_plugin_textdomain()
+    {
+        if (version_compare($GLOBALS['wp_version'], '6.7', '<')) {
             load_plugin_textdomain('multivendorx', false, plugin_basename(dirname(dirname(__FILE__))) . '/languages');
         } else {
-            load_textdomain( 'multivendorx', WP_LANG_DIR . '/plugins/dc-woocommerce-multi-vendor-' . determine_locale() . '.mo' );
+            load_textdomain('multivendorx', WP_LANG_DIR . '/plugins/dc-woocommerce-multi-vendor-' . determine_locale() . '.mo');
         }
     }
 
@@ -305,12 +449,13 @@ final class MVX {
      * @param type $class_name
      * @param type $dir
      */
-    public function load_class($class_name = '', $dir = '') {
+    public function load_class($class_name = '', $dir = '')
+    {
         if ('' != $class_name && '' != $this->token) {
             if (!$dir)
-                require_once ( 'class-' . esc_attr($this->token) . '-' . esc_attr($class_name) . '.php' );
+                require_once('class-' . esc_attr($this->token) . '-' . esc_attr($class_name) . '.php');
             else
-                require_once ( trailingslashit( $dir ) . 'class-' . esc_attr($this->token) . '-' . strtolower($dir) . '-' . esc_attr($class_name) . '.php' );
+                require_once(trailingslashit($dir) . 'class-' . esc_attr($this->token) . '-' . strtolower($dir) . '-' . esc_attr($class_name) . '.php');
         }
     }
 
@@ -320,7 +465,8 @@ final class MVX {
      * @access public
      * @return void
      */
-    function nocache() {
+    function nocache()
+    {
         if (!defined('DONOTCACHEPAGE')) {
             // WP Super Cache constant
             define("DONOTCACHEPAGE", "true");
@@ -332,7 +478,8 @@ final class MVX {
      *
      * @return string
      */
-    public function ajax_url() {
+    public function ajax_url()
+    {
         return admin_url('admin-ajax.php', 'relative');
     }
 
@@ -342,7 +489,8 @@ final class MVX {
      * @access public
      * @return void
      */
-    function init_user_roles() {
+    function init_user_roles()
+    {
         $this->load_class('user');
         $this->user = new MVX_User();
     }
@@ -353,7 +501,8 @@ final class MVX {
      * @access public
      * @return void
      */
-    function init_taxonomy() {
+    function init_taxonomy()
+    {
         $this->load_class('taxonomy');
         $this->taxonomy = new MVX_Taxonomy();
         register_activation_hook(__FILE__, 'flush_rewrite_rules');
@@ -365,7 +514,8 @@ final class MVX {
      * @access public
      * @return void
      */
-    function init_custom_post() {
+    function init_custom_post()
+    {
         /* Commission post type */
         $this->load_class('post-commission');
 
@@ -383,7 +533,8 @@ final class MVX {
      * @access public
      * @return void
      */
-    function init_custom_reports() {
+    function init_custom_reports()
+    {
         // Init custom report
         $this->load_class('report');
         $this->report = new MVX_Report();
@@ -395,7 +546,8 @@ final class MVX {
      * @access public
      * @return void
      */
-    function init_custom_widgets() {
+    function init_custom_widgets()
+    {
         $this->load_class('widget-init');
         new MVX_Widget_Init();
     }
@@ -406,7 +558,8 @@ final class MVX {
      * @access public
      * @return void
      */
-    function init_custom_capabilities() {
+    function init_custom_capabilities()
+    {
         $this->load_class('capabilities');
         $this->vendor_caps = new MVX_Capabilities();
     }
@@ -417,7 +570,8 @@ final class MVX {
      * @access public
      * @return void
      */
-    function init_vendor_dashboard() {
+    function init_vendor_dashboard()
+    {
         $this->load_class('vendor-dashboard');
         $this->vendor_dashboard = new MVX_Admin_Dashboard();
     }
@@ -428,16 +582,18 @@ final class MVX {
      * @access public
      * @return void
      */
-    function init_cron_job() {
+    function init_cron_job()
+    {
         add_filter('cron_schedules', array($this, 'add_mvx_corn_schedule'));
         $this->load_class('cron-job');
         $this->cron_job = new MVX_Cron_Job();
     }
 
-    private function init_payment_gateway() {
+    private function init_payment_gateway()
+    {
         $this->load_class('payment-gateway');
     }
-    
+
     /**
      * MVX Shipping
      * 
@@ -445,19 +601,21 @@ final class MVX {
      * @since  3.2.2 
      * @access public
      * @package MultiVendorX/Classes/Shipping
-    */
-    public function load_vendor_shipping() {
-        $this->load_class( 'shipping-gateway' );
+     */
+    public function load_vendor_shipping()
+    {
+        $this->load_class('shipping-gateway');
         $this->shipping_gateway = new MVX_Shipping_Gateway();
-        MVX_Shipping_Gateway::load_class( 'shipping-zone', 'helpers' );
+        MVX_Shipping_Gateway::load_class('shipping-zone', 'helpers');
     }
 
-    public function mvx_remove_woocommerce_admin_from_vendor() {
+    public function mvx_remove_woocommerce_admin_from_vendor()
+    {
         if (is_user_mvx_vendor(get_current_user_id())) {
             return true;
         }
     }
-    
+
     /**
      * MVX Woo Helper
      * 
@@ -465,11 +623,12 @@ final class MVX {
      * @since  3.2.3
      * @access public
      * @package MultiVendorX/Include/Woo_Helper
-    */
-    public function load_woo_helper() {
+     */
+    public function load_woo_helper()
+    {
         //common woo methods
-        if ( ! class_exists( 'MVX_Woo_Helper' ) ) {
-            require_once ( $this->plugin_path . 'includes/class-mvx-woo-helper.php' );
+        if (! class_exists('MVX_Woo_Helper')) {
+            require_once($this->plugin_path . 'includes/class-mvx-woo-helper.php');
         }
     }
 
@@ -479,18 +638,20 @@ final class MVX {
      * @access public
      * @return void
      */
-    function init_vendor_coupon() {
+    function init_vendor_coupon()
+    {
         $this->load_class('coupon');
         $this->coupon = new MVX_Coupon();
     }
-    
+
     /**
      * Init Ledger
      *
      * @access public
      * @return void
      */
-    function init_ledger() {
+    function init_ledger()
+    {
         $this->load_class('ledger');
         $this->ledger = new MVX_Ledger();
     }
@@ -502,7 +663,8 @@ final class MVX {
      * @param schedules array
      * @return schedules array
      */
-    function add_mvx_corn_schedule($schedules) {
+    function add_mvx_corn_schedule($schedules)
+    {
         $schedules['weekly'] = array(
             'interval' => 604800,
             'display' => __('Every 7 Days', 'multivendorx')
@@ -516,10 +678,10 @@ final class MVX {
             'display' => __('Every 15 Days', 'multivendorx')
         );
         $schedules['every_5minute'] = array(
-                'interval' => 5*60, // in seconds
-                'display'  => __( 'Every 5 minute', 'multivendorx' )
+            'interval' => 5 * 60, // in seconds
+            'display'  => __('Every 5 minute', 'multivendorx')
         );
-        
+
         return $schedules;
     }
 
@@ -530,11 +692,12 @@ final class MVX {
      * @param  array $default params
      * @return array|bool
      */
-    public function mvx_get_script_content($handle, $default) {
+    public function mvx_get_script_content($handle, $default)
+    {
         global $MVX;
 
         switch ($handle) {
-            case 'frontend_js' :
+            case 'frontend_js':
                 $params = array(
                     'ajax_url' => $this->ajax_url(),
                     'messages' => array(
@@ -544,19 +707,19 @@ final class MVX {
                     'frontend_nonce' => wp_create_nonce('mvx-frontend')
                 );
                 break;
-            
-            case 'mvx_frontend_vdashboard_js' :
-            case 'mvx_single_product_multiple_vendors' :
-            case 'mvx_customer_qna_js' :
-            case 'mvx_new_vandor_announcements_js' :
+
+            case 'mvx_frontend_vdashboard_js':
+            case 'mvx_single_product_multiple_vendors':
+            case 'mvx_customer_qna_js':
+            case 'mvx_new_vandor_announcements_js':
                 $params = array(
                     'ajax_url' => $this->ajax_url(),
                     'dashboard_nonce' => wp_create_nonce('mvx-dashboard'),
                     'vendors_nonce' => wp_create_nonce('mvx-vendors'),
                 );
                 break;
-            
-            case 'mvx_seller_review_rating_js' :
+
+            case 'mvx_seller_review_rating_js':
                 $params = array(
                     'ajax_url' => $this->ajax_url(),
                     'review_nonce' => wp_create_nonce('mvx-review'),
@@ -568,39 +731,39 @@ final class MVX {
                     ),
                 );
                 break;
-            
-            case 'mvx-vendor-shipping' :
-            case 'mvx_vendor_shipping' :    
+
+            case 'mvx-vendor-shipping':
+            case 'mvx_vendor_shipping':
                 $params = array(
-                    'ajaxurl'	=> $this->ajax_url(),
+                    'ajaxurl'    => $this->ajax_url(),
                     'security' => wp_create_nonce('mvx-shipping'),
-                    'i18n' 	=> array(
-			'deleteShippingMethodConfirmation'	=> __( 'Are you absolutely sure to delete this shipping method?', 'multivendorx' ),
+                    'i18n'     => array(
+                        'deleteShippingMethodConfirmation'    => __('Are you absolutely sure to delete this shipping method?', 'multivendorx'),
                     ),
-                    'everywhere_else_option'  => __( 'Everywhere Else', 'multivendorx' ),
-                    'multiblock_delete_confirm' => __( "Are you sure and want to delete this 'Block'?\nYou can't undo this action ...", "multivendorx" ),
-                    'mvx_multiblick_addnew_help' => __( 'Add New Block', 'multivendorx' ),
-                    'mvx_multiblick_remove_help' => __( 'Remove Block', 'multivendorx' ),
+                    'everywhere_else_option'  => __('Everywhere Else', 'multivendorx'),
+                    'multiblock_delete_confirm' => __("Are you sure and want to delete this 'Block'?\nYou can't undo this action ...", "multivendorx"),
+                    'mvx_multiblick_addnew_help' => __('Add New Block', 'multivendorx'),
+                    'mvx_multiblick_remove_help' => __('Remove Block', 'multivendorx'),
                 );
                 break;
-            case 'mvx-meta-boxes' :
+            case 'mvx-meta-boxes':
                 $params = array(
-                    'coupon_meta' => array( 
+                    'coupon_meta' => array(
                         'coupon_code' => array(
-                            'generate_button_text' => esc_html__( 'Generate coupon code', 'multivendorx' ),
-                            'characters'           => apply_filters( 'mvx_coupon_code_generator_characters', 'ABCDEFGHJKMNPQRSTUVWXYZ23456789' ),
-                            'char_length'          => apply_filters( 'mvx_coupon_code_generator_character_length', 8 ),
-                            'prefix'               => apply_filters( 'mvx_coupon_code_generator_prefix', '' ),
-                            'suffix'               => apply_filters( 'mvx_coupon_code_generator_suffix', '' ),
+                            'generate_button_text' => esc_html__('Generate coupon code', 'multivendorx'),
+                            'characters'           => apply_filters('mvx_coupon_code_generator_characters', 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'),
+                            'char_length'          => apply_filters('mvx_coupon_code_generator_character_length', 8),
+                            'prefix'               => apply_filters('mvx_coupon_code_generator_prefix', ''),
+                            'suffix'               => apply_filters('mvx_coupon_code_generator_suffix', ''),
                         )
                     )
                 );
                 break;
-                
+
             default:
                 $params = array('ajax_url' => $this->ajax_url(), 'types_nonce' => wp_create_nonce('mvx-types'));
         }
-        if ($default && is_array($default)) $params = array_merge($default,$params);
+        if ($default && is_array($default)) $params = array_merge($default, $params);
         return apply_filters('mvx_get_script_content', $params, $handle);
     }
 
@@ -609,8 +772,9 @@ final class MVX {
      * @since  3.0.6 
      * @param  string $handle
      */
-    public function localize_script($handle, $params = array(), $object = '') {
-        if ( $data = $this->mvx_get_script_content($handle, $params) ) {
+    public function localize_script($handle, $params = array(), $object = '')
+    {
+        if ($data = $this->mvx_get_script_content($handle, $params)) {
             $name = str_replace('-', '_', $handle) . '_script_data';
             if ($object) {
                 $name = str_replace('-', '_', $object) . '_script_data';
@@ -618,22 +782,23 @@ final class MVX {
             wp_localize_script($handle, $name, apply_filters($name, $data));
         }
     }
-    
+
     /**
      * init Stripe library.
      *
      * @access public
      */
-    public function init_stripe_library() {
+    public function init_stripe_library()
+    {
         global $MVX;
         $load_library = mvx_is_module_active('stripe-connect') ? true : false;
         if (apply_filters('mvx_load_stripe_library', $load_library)) {
             $stripe_dependencies = WC_Dependencies_Product_Vendor::stripe_dependencies();
             if ($stripe_dependencies['status']) {
                 if (!class_exists("Stripe\Stripe")) {
-                    require_once( $this->plugin_path . 'lib/Stripe/init.php' );
+                    require_once($this->plugin_path . 'lib/Stripe/init.php');
                 }
-            }else{
+            } else {
                 switch ($stripe_dependencies['module']) {
                     case 'phpversion':
                         add_action('admin_notices', array($this, 'mvx_stripe_phpversion_required_notice'));
@@ -654,36 +819,40 @@ final class MVX {
         }
     }
 
-    public function mvx_stripe_phpversion_required_notice() {
-        ?>
+    public function mvx_stripe_phpversion_required_notice()
+    {
+    ?>
         <div id="message" class="error">
-            <p><?php printf(__("%sMVX Stripe Gateway%s requires PHP 5.3.29 or greater. We recommend upgrading to PHP %s or greater.", 'multivendorx' ), '<strong>', '</strong>', '5.6' ); ?></p>
+            <p><?php printf(__("%sMVX Stripe Gateway%s requires PHP 5.3.29 or greater. We recommend upgrading to PHP %s or greater.", 'multivendorx'), '<strong>', '</strong>', '5.6'); ?></p>
         </div>
-        <?php
+    <?php
     }
-    
-    public function mvx_stripe_curl_required_notice() {
-        ?>
+
+    public function mvx_stripe_curl_required_notice()
+    {
+    ?>
         <div id="message" class="error">
-            <p><?php printf(__("%sMVX Stripe gateway depends on the %s PHP extension. Please enable it, or ask your hosting provider to enable it.", 'multivendorx' ), '<strong>', '</strong>', 'curl' ); ?></p>
+            <p><?php printf(__("%sMVX Stripe gateway depends on the %s PHP extension. Please enable it, or ask your hosting provider to enable it.", 'multivendorx'), '<strong>', '</strong>', 'curl'); ?></p>
         </div>
-        <?php
+    <?php
     }
-    
-    public function mvx_stripe_mbstring_required_notice() {
-        ?>
+
+    public function mvx_stripe_mbstring_required_notice()
+    {
+    ?>
         <div id="message" class="error">
-            <p><?php printf(__("%sMVX Stripe gateway depends on the %s PHP extension. Please enable it, or ask your hosting provider to enable it.", 'multivendorx' ), '<strong>', '</strong>', 'mbstring' ); ?></p>
+            <p><?php printf(__("%sMVX Stripe gateway depends on the %s PHP extension. Please enable it, or ask your hosting provider to enable it.", 'multivendorx'), '<strong>', '</strong>', 'mbstring'); ?></p>
         </div>
-        <?php
+    <?php
     }
-    
-    public function mvx_stripe_json_required_notice() {
-        ?>
+
+    public function mvx_stripe_json_required_notice()
+    {
+    ?>
         <div id="message" class="error">
-            <p><?php printf(__("%sMVX Vendor Membership Stripe gateway depends on the %s PHP extension. Please enable it, or ask your hosting provider to enable it.", 'multivendorx' ), '<strong>', '</strong>', 'json' ); ?></p>
+            <p><?php printf(__("%sMVX Vendor Membership Stripe gateway depends on the %s PHP extension. Please enable it, or ask your hosting provider to enable it.", 'multivendorx'), '<strong>', '</strong>', 'json'); ?></p>
         </div>
-        <?php
+<?php
     }
 
     /**
@@ -694,7 +863,8 @@ final class MVX {
      * @param  string $new_version
      * @return string
      */
-    private static function parse_update_notice_old($content, $new_version) {
+    private static function parse_update_notice_old($content, $new_version)
+    {
         // Output Upgrade Notice.
         $matches = null;
         $regexp = '~==\s*Upgrade Notice\s*==\s*=\s*(.*)\s*=(.*)(=\s*' . preg_quote(MVX_PLUGIN_VERSION) . '\s*=|$)~Uis';
@@ -730,7 +900,7 @@ final class MVX {
         return wp_kses_post($upgrade_notice);
     }
 
-    
+
     /**
      * Helper function to get whether custom order tables are enabled or not.
      *
@@ -740,7 +910,8 @@ final class MVX {
      *
      * @return bool
      */
-    public static function hpos_is_enabled(): bool {
-        return version_compare( WC_VERSION, '8.3.0', '>=' ) ? WCOrderUtil::custom_orders_table_usage_is_enabled() : false;
+    public static function hpos_is_enabled(): bool
+    {
+        return version_compare(WC_VERSION, '8.3.0', '>=') ? WCOrderUtil::custom_orders_table_usage_is_enabled() : false;
     }
 }
