@@ -121,7 +121,7 @@ final class MVX
         <div class=" mvx_admin_new_banner">
             <div class="mvx-beta-logo"><img src=<?php echo $MVX->plugin_url . 'assets/images/mvx-brand-logo.png'; ?> alt="beta-logo"></div>
             <div class="mvx-banner-content">
-                <h1 class="mvx-banner-tilte">Your marketplace dream is about to get bigger.</h1>
+                <h1 class="mvx-banner-tilte">Your marketplace dream is about to get bigger with MultiVendorX 5.0.0 !!</h1>
                 <div class="mvx-paragraph-btn-wrap">
                     <p class="mvx-banner-description">We’ve shattered old marketplace limits and built something remarkable.
                         MultiVendorX 5.0.0 marks a new era - one platform for any marketplace vision.
