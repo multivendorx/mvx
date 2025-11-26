@@ -186,24 +186,35 @@ $multi_split_payment_options = $MVX->vendor_dashboard->is_multi_option_split_ena
 									$url = apply_filters( 'mvx_vendor_stripe_connect_account_type_request_url', 'https://connect.stripe.com/oauth/authorize', $account_type ) . '?' . http_build_query( apply_filters( 'mvx_vendor_stripe_connect_account_type_request_params' , $authorize_request_body, $account_type ) );
 									$stripe_connect_url = $MVX->plugin_url . 'assets/images/blue-on-light.png';
 	
-									if (!$status) {
+									if ($account_type == 'express' && !empty(get_user_meta($user_id, '_vendor_country_code', true))) {
 										?>
 										<div class="form-group">
 											<label class="control-label col-sm-3 col-md-3"><?php _e('Stripe connect', 'multivendorx'); ?></label>
 											<div class="col-md-6 col-sm-9">
-												<a href=<?php echo $url; ?> target="_self"><img src="<?php echo $stripe_connect_url; ?>" /></a>
+												<b><?php _e('Please set your country code in the settings page before connecting stripe account', 'multivendorx'); ?></b>
 											</div>
 										</div>
 										<?php
 									} else {
-										?>
-										<div class="form-group">
-											<label class="control-label col-sm-3 col-md-3"><?php _e('Stripe connect', 'multivendorx'); ?></label>
-											<div class="col-md-6 col-sm-9">
-												<a href=<?php echo $url; ?> target="_self"><img src="<?php echo $stripe_connect_url; ?>" /></a>
+										if (!$status) {
+											?>
+											<div class="form-group">
+												<label class="control-label col-sm-3 col-md-3"><?php _e('Stripe connect', 'multivendorx'); ?></label>
+												<div class="col-md-6 col-sm-9">
+													<a href=<?php echo $url; ?> target="_self"><img src="<?php echo $stripe_connect_url; ?>" /></a>
+												</div>
 											</div>
-										</div>
-										<?php
+											<?php
+										} else {
+											?>
+											<div class="form-group">
+												<label class="control-label col-sm-3 col-md-3"><?php _e('Stripe connect', 'multivendorx'); ?></label>
+												<div class="col-md-6 col-sm-9">
+													<a href=<?php echo $url; ?> target="_self"><img src="<?php echo $stripe_connect_url; ?>" /></a>
+												</div>
+											</div>
+											<?php
+										}
 									}
 								}
 							}
