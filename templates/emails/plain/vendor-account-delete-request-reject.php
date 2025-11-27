@@ -18,7 +18,7 @@ global $MVX;
 echo "= " . $email_heading . " =\n\n";
 echo sprintf( __( "Dear %s,", 'multivendorx' ), $user_login );
 echo '\n';
-echo _e('We regret to inform you that your request to delete your vendor profile has been rejected.', 'multivendorx');
+_e('We regret to inform you that your request to delete your vendor profile has been rejected.', 'multivendorx');
 echo '\n';
 echo sprintf( __('If you have any questions or concerns, please reach out to us over %s', 'multivendorx'), $admin_email );
 
