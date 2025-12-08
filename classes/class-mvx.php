@@ -108,7 +108,7 @@ final class MVX
 
         add_action('jwt_auth_token_before_dispatch', array(&$this, 'mvx_modify_jwt_auth_plugin_response'),  20, 2);
 
-        if (!get_option('_is_dismiss_mvx5_0_notice', false)) {
+        if (!get_option('_is_dismiss_mvx5_0_notice_4.2.38', false)) {
             add_action('admin_notices', array($this, 'mvx_service_page_notice'));
             add_action('wp_ajax_dismiss_mvx_servive_notice', array($this, 'dismiss_mvx_servive_notice'));
         }
@@ -127,7 +127,7 @@ final class MVX
                         MultiVendorX 5.0.0 marks a new era - one platform for any marketplace vision.
                         Think you know MultiVendorX? Get ready to be amazed.</p>
                     <div class="buttons-wrapper" style="margin: 1rem 0; width:100%;">
-                        <a href="https://www.facebook.com/groups/226246620006065/" style="background:#fff; color: #5007aa;" target="_blank" class="mvx_btn_service_claim_now"><?php esc_html_e('Join our Facebook community to follow every update', 'multivendorx'); ?></a>
+                        <a href="https://multivendorx.com/release/?utm_source=pluginsettings&utm_medium=plugin&utm_campaign=newrelease" style="background:#fff; color: #5007aa;" target="_blank" class="mvx_btn_service_claim_now"><?php esc_html_e('What makes MultiVendorX 5.0 unstoppable!', 'multivendorx'); ?></a>
                         <a href="https://multivendordemo.com/multivendorx/wp-admin/" target="_blank" class="mvx_btn_service_claim_now"><?php esc_html_e('Explore the beta demo', 'multivendorx'); ?></a>
                     </div>
                 </div>
@@ -236,7 +236,7 @@ final class MVX
 
     public function dismiss_mvx_servive_notice()
     {
-        $updated = update_option('_is_dismiss_mvx5_0_notice', true);
+        $updated = update_option('_is_dismiss_mvx5_0_notice_4.2.38', true);
         echo $updated;
         die();
     }
