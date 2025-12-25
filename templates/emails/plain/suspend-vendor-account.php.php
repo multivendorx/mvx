@@ -24,11 +24,11 @@ echo '\n';
 
 echo sprintf( __( "Username: %s", 'multivendorx' ), $user_login );
 echo '\n';
-echo _e( "Status: Suspended", 'multivendorx' ); 
+_e( "Status: Suspended", 'multivendorx' ); 
 echo '\n';
 echo sprintf( __( "Login URL: %s", 'multivendorx' ), mvx_get_vendor_dashboard_endpoint_url( 'dashboard' ) ); 
 echo '\n';
-echo _e('Kindly contact your Administrator for further details.', 'multivendorx', 'multivendorx');
+_e('Kindly contact your Administrator for further details.', 'multivendorx', 'multivendorx');
 
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 echo apply_filters( 'mvx_email_footer_text', get_option( 'mvx_email_footer_text' ) );

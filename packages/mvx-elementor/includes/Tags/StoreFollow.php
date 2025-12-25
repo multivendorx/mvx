@@ -52,7 +52,7 @@ class StoreFollow extends MVX_Elementor_TagBase {
             $follow_status = in_array($vendor_id, $vendor_lists) ? __( 'Unfollow', 'multivendorx' ) : __( 'Follow', 'multivendorx' );
         	echo is_user_logged_in() ? esc_attr($follow_status) : esc_html_e('You must log in to follow', 'multivendorx');
         } else {
-            echo esc_html_e( 'Follow', 'multivendorx' );
+            esc_html_e( 'Follow', 'multivendorx' );
         }
     }
 }

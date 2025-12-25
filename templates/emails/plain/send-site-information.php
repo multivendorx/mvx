@@ -18,9 +18,9 @@ global $MVX;
 echo "= " . $email_heading . " =\n\n";
 echo sprintf( __("Hi %s, thanks you for sharing the details of your site.", 'multivendorx' ), $user_login );
 echo '\n';
-echo _e('As a token of gesture, we are offering you 10% discount code on our Pro package : https://multivendorx.com/pricing', 'multivendorx');
+_e('As a token of gesture, we are offering you 10% discount code on our Pro package : https://multivendorx.com/pricing', 'multivendorx');
 echo '\n';
-echo _e('This offer is valid for 2 days. Grab your offer now!!', 'multivendorx');
+_e('This offer is valid for 2 days. Grab your offer now!!', 'multivendorx');
 
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 echo apply_filters( 'mvx_email_footer_text', get_option( 'mvx_email_footer_text' ) );
