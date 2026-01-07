@@ -33,6 +33,8 @@ class MVX_User {
         add_action('woocommerce_created_customer_notification', array($this, 'mvx_woocommerce_created_customer_notification'), 9, 3);
         // Create woocommerce term and shipping on change user role
         add_action('set_user_role', array(&$this, 'set_user_role'), 30, 3);
+
+        add_action('mvx_set_user_role', array($this, 'mvx_set_user_meta_role'), 35, 3);
         // Add message in my account page after vendore registrtaion
         add_action('woocommerce_before_my_account', array(&$this, 'woocommerce_before_my_account'));
         // Add vendor new order email template
@@ -310,6 +312,19 @@ class MVX_User {
             }
         }
         do_action('mvx_set_user_role', $user_id, $new_role, $old_role);
+    }
+
+    public function mvx_set_user_meta_role($user_id, $new_role, $old_role) {
+        if (in_array('dc_pending_vendor', $old_role)) {
+            $vendor_application_data = get_user_meta(absint($user_id), 'mvx_vendor_fields', true);
+            foreach ( $vendor_application_data as $item ) {
+                if ( isset( $item['type'] ) && $item['type'] === 'vendor_page_title' ) {
+                    $vendor_page_title = $item['value'];
+                    break;
+                }
+            }
+            update_user_meta($user_id, '_vendor_page_title', wc_clean($vendor_page_title));
+        }
     }
 
     /**
@@ -736,7 +751,6 @@ class MVX_User {
      * @param $user_id
      */
     public function vendor_registration($user_id) {
-        global $MVX;
         if (mvx_is_module_active('marketplace-membership') && filter_input(INPUT_POST, 'create_vendor_membership_payment', FILTER_DEFAULT) === 'yes') {
             $user = new WP_User(absint($user_id));
             $user->set_role('dc_pending_vendor');
@@ -758,7 +772,7 @@ class MVX_User {
                             $vendor = get_mvx_vendor($user_id);
                             if ($vendor) {
                                 if (!$vendor->update_page_title(wc_clean($value['value']))) {}
-                            }
+                            } 
                         }
                     }
                 }
