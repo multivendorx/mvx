@@ -29,6 +29,9 @@ if ( !empty($mvx_vendor_followed_by_customer) ) {
             echo '<td>' . $row ['customer_name'] = $user_details->user_email . '</td></tr>';
         }
     }
+    ?>
+    </table>
+<?php
 }else {
     echo esc_html_e('No customer follows you till now.', 'multivendorx');          
 }
