@@ -30,5 +30,5 @@ if ( !empty($mvx_vendor_followed_by_customer) ) {
         }
     }
 }else {
-    echo esc_html_e('No customer follows you till now.', 'multivendorx');          
+    esc_html_e('No customer follows you till now.', 'multivendorx');          
 }

@@ -22,7 +22,7 @@ if (!empty($mvx_vendor_registration_form_data) && is_array($mvx_vendor_registrat
                 <div class="clearboth"></div>
                 </div>
                 <div class="mvx_regi_form_box">
-                <h3 class="reg_header2"><?php echo esc_html_e($value['label'],'multivendorx'); ?></h3>
+                <h3 class="reg_header2"><?php esc_html_e($value['label'],'multivendorx'); ?></h3>
                 <?php
                 break;
             case 'textbox':

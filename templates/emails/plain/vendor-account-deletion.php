@@ -18,9 +18,9 @@ global $MVX;
 echo "= " . $email_heading . " =\n\n";
 echo sprintf( __( "Hi %s,", 'multivendorx' ), $user_login );
 echo '\n';
-echo _e('We wanted to let you know that your vendor profile has been deleted by the admin.', 'multivendorx');
+_e('We wanted to let you know that your vendor profile has been deleted by the admin.', 'multivendorx');
 echo '\n';
-echo _e('If you have any questions or need further assistance, feel free to reach out.', 'multivendorx');
+_e('If you have any questions or need further assistance, feel free to reach out.', 'multivendorx');
 
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 echo apply_filters( 'mvx_email_footer_text', get_option( 'mvx_email_footer_text' ) );
