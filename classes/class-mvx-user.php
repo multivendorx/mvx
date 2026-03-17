@@ -1029,11 +1029,8 @@ class MVX_User {
             $_cookie_id = "_mvx_user_cookie_".$current_user_id;
             if ( ! headers_sent() ) {
                 $secure = ( 'https' === parse_url( home_url(), PHP_URL_SCHEME ) );
-                if(!isset($_COOKIE[$_cookie_id])) { 
-                    setcookie( $_cookie_id, uniqid('mvx_cookie'), time() + YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN, $secure );
-                }else{
-                    setcookie( $_cookie_id, $_COOKIE[$_cookie_id], time() + YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN, $secure );
-                }
+                $cookie_value = $_COOKIE[$_cookie_id] ?? uniqid('mvx_cookie');
+                wc_setcookie($_cookie_id, $cookie_value, time() + YEAR_IN_SECONDS, $secure, true);
             }
         }
     }
