@@ -20,6 +20,7 @@ $vendor_hide_description = get_user_meta($vendor->id, '_vendor_hide_description'
 $vendor_hide_email = get_user_meta($vendor->id, '_vendor_hide_email', true);
 $vendor_hide_address = get_user_meta($vendor->id, '_vendor_hide_address', true);
 $vendor_hide_phone = get_user_meta($vendor->id, '_vendor_hide_phone', true);
+$vendor_page_title = get_user_meta($vendor->id, '_vendor_page_title', true);
 
 $field_type = apply_filters('mvx_vendor_storefront_wpeditor_enabled', true, $vendor->id) ? 'wpeditor' : 'textarea';
 $_wp_editor_settings = array('tinymce' => true);
@@ -175,7 +176,7 @@ $banner = $vendor->get_image('banner') ? $vendor->get_image('banner') : $MVX->pl
                     <div class="form-group">
                         <label class="control-label col-sm-3 col-md-3"><?php _e('Store Name *', 'multivendorx'); ?></label>
                         <div class="col-md-6 col-sm-9">
-                            <input class="no_input form-control" type="text" name="vendor_page_title" value="<?php echo isset($vendor_page_title['value']) ? $vendor_page_title['value'] : ''; ?>"  placeholder="<?php _e('Enter your Store Name here', 'multivendorx'); ?>">
+                            <input class="no_input form-control" type="text" name="vendor_page_title" value="<?php echo $vendor_page_title ? $vendor_page_title : ''; ?>"  placeholder="<?php _e('Enter your Store Name here', 'multivendorx'); ?>">
                         </div>  
                     </div>
                     <div class="form-group">
