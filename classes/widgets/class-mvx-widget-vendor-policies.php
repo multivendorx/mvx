@@ -62,19 +62,19 @@ class MVX_Widget_Vendor_Policies extends WC_Widget {
             $content .= '<div class="mvx-product-policies">';
             if(isset($policies['shipping_policy']) && !empty($policies['shipping_policy']) && $shipping) {
                 $content .='<div class="mvx-shipping-policies policy">
-                    <h2 class="mvx_policies_heading heading">'. esc_html_e('Shipping Policy', 'multivendorx').'</h2>
+                    <h2 class="mvx_policies_heading heading">'. esc_html__('Shipping Policy', 'multivendorx').'</h2>
                     <div class="mvx_policies_description description" >'.$policies['shipping_policy'].'</div>
                 </div>';
             } 
             if(isset($policies['refund_policy']) && !empty($policies['refund_policy']) && $refund){ 
                 $content .='<div class="mvx-refund-policies policy">
-                    <h2 class="mvx_policies_heading heading heading">'. esc_html_e('Refund Policy', 'multivendorx').'</h2>
+                    <h2 class="mvx_policies_heading heading heading">'. esc_html__('Refund Policy', 'multivendorx').'</h2>
                     <div class="mvx_policies_description description">'.$policies['refund_policy'].'</div>
                 </div>';
             } 
             if(isset($policies['cancellation_policy']) && !empty($policies['cancellation_policy']) && $cancel){ 
                 $content .='<div class="mvx-cancellation-policies policy">
-                    <h2 class="mvx_policies_heading heading">'. esc_html_e('Cancellation / Return / Exchange Policy', 'multivendorx').'</h2>
+                    <h2 class="mvx_policies_heading heading">'. esc_html__('Cancellation / Return / Exchange Policy', 'multivendorx').'</h2>
                     <div class="mvx_policies_description description" >'.$policies['cancellation_policy'].'</div>
                 </div>';
             }
