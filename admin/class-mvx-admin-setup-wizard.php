@@ -372,7 +372,7 @@ class MVX_Admin_Setup_Wizard {
     public function mvx_setup_introduction() {
         ?>
         <h1><?php esc_html_e('Welcome to the MultivendorX family!', 'multivendorx'); ?></h1>
-        <p><?php echo wp_kses_post('Thank you for choosing MultivendorX! This quick setup wizard will help you configure the basic settings and you will have your marketplace ready in no time. <strong>It’s completely optional and shouldn’t take longer than five minutes.</strong>', 'multivendorx'); ?></p>
+        <p><?php echo wp_kses_post(__('Thank you for choosing MultivendorX! This quick setup wizard will help you configure the basic settings and you will have your marketplace ready in no time. <strong>It’s completely optional and shouldn’t take longer than five minutes.</strong>', 'multivendorx')); ?></p>
         <p><?php esc_html_e("If you don't want to go through the wizard right now, you can skip and return to the WordPress dashboard. Come back anytime if you change your mind!", 'multivendorx'); ?></p>
         <p class="wc-setup-actions step">
             <a href="<?php echo esc_url(admin_url()); ?>" class="button button-large"><?php esc_html_e('Not right now', 'multivendorx'); ?></a>
