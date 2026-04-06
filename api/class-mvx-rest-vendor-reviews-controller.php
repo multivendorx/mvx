@@ -129,7 +129,7 @@ class MVX_REST_API_Vendor_Reviews_Controller extends WC_REST_Controller {
 		if ( !is_user_mvx_vendor( $vendor_id ) ) {
 			return new WP_Error( 'mvx_rest_cannot_view', __( 'Sorry, you cannot list resources.', 'multivendorx' ), array( 'status' => rest_authorization_required_code() ) );
 		}
-		return true;
+		return current_user_can('read');
 	}
 
 	/**
@@ -143,7 +143,7 @@ class MVX_REST_API_Vendor_Reviews_Controller extends WC_REST_Controller {
 		if ( !is_user_mvx_vendor( $vendor_id ) ) {
 			return new WP_Error( 'mvx_rest_cannot_view', __( 'Sorry, you cannot view this resource.', 'multivendorx' ), array( 'status' => rest_authorization_required_code() ) );
 		}
-		return true;
+		return current_user_can('read');
 	}
 
 	/**
@@ -157,7 +157,7 @@ class MVX_REST_API_Vendor_Reviews_Controller extends WC_REST_Controller {
 		if ( !is_user_mvx_vendor( $vendor_id ) ) {
 			return new WP_Error( 'mvx_rest_cannot_create', __( 'Sorry, you are not allowed to create resources.', 'multivendorx' ), array( 'status' => rest_authorization_required_code() ) );
 		}
-		return true;
+		return current_user_can('read');
 	}
 
 	/**
@@ -171,7 +171,7 @@ class MVX_REST_API_Vendor_Reviews_Controller extends WC_REST_Controller {
 		if ( !is_user_mvx_vendor( $vendor_id ) ) {
 			return new WP_Error( 'mvx_rest_cannot_edit', __( 'Sorry, you cannot edit this resource.', 'multivendorx' ), array( 'status' => rest_authorization_required_code() ) );
 		}
-		return true;
+		return current_user_can('read');
 	}
 
 	/**
@@ -185,7 +185,7 @@ class MVX_REST_API_Vendor_Reviews_Controller extends WC_REST_Controller {
 		if ( !is_user_mvx_vendor( $vendor_id ) ) {
 			return new WP_Error( 'mvx_rest_cannot_edit', __( 'Sorry, you cannot delete this resource.', 'multivendorx' ), array( 'status' => rest_authorization_required_code() ) );
 		}
-		return true;
+		return current_user_can('read');
 	}
 
 	/**
